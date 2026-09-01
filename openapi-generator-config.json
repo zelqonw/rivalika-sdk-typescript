@@ -1,0 +1,14 @@
+{
+  "generatorName": "typescript-fetch",
+  "inputSpec": "openapi/rivalika-public-api.json",
+  "outputDir": ".",
+  "additionalProperties": {
+    "npmName": "@rivalika/sdk",
+    "npmVersion": "1.0.0-beta.1",
+    "supportsES6": true,
+    "useSingleRequestParameter": true,
+    "withInterfaces": true,
+    "typescriptThreePlus": true,
+    "licenseName": "Apache-2.0"
+  }
+}
