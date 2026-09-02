@@ -64,7 +64,6 @@
       "RivalikaApiKey": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "Rivalika API key",
         "description": "Use an API key created in Settings → API."
       }
     },
