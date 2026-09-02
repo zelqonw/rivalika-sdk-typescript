@@ -5,7 +5,7 @@ the committed OpenAPI 3.1 contract with OpenAPI Generator 7.22.0. The package
 also includes maintained helpers for verifying signed webhook deliveries.
 
 The beta package name is `@rivalika/sdk` and its first approved release will be
-`1.0.0-beta.1`. Registry publication is a separate release approval; until that
+`1.0.0-beta.2`. Registry publication is a separate release approval; until that
 tag is published, clone this repository and run `npm ci && npm run build`.
 
 ## API client

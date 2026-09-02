@@ -4,6 +4,7 @@ All URIs are relative to *https://api.rivalika.com*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**archiveCommercialProduct**](CommercialCatalogApi.md#archivecommercialproduct) | **POST** /api/v1/commercial/products/{productId}/archive | Archive a commercial product |
 | [**createCommercialPartner**](CommercialCatalogApi.md#createcommercialpartneroperation) | **POST** /api/v1/commercial/partners | Create a commercial partner |
 | [**createCommercialProduct**](CommercialCatalogApi.md#createcommercialproductoperation) | **POST** /api/v1/commercial/products | Create a commercial product |
 | [**deleteCommercialProduct**](CommercialCatalogApi.md#deletecommercialproductoperation) | **DELETE** /api/v1/commercial/products/{commercial_product_id} | Delete a commercial product |
@@ -13,10 +14,89 @@ All URIs are relative to *https://api.rivalika.com*
 | [**getMarketLink**](CommercialCatalogApi.md#getmarketlink) | **GET** /api/v1/commercial/products/{commercial_product_id}/market-link | Get a market link |
 | [**listCommercialPartners**](CommercialCatalogApi.md#listcommercialpartners) | **GET** /api/v1/commercial/partners | List commercial partners |
 | [**listCommercialProducts**](CommercialCatalogApi.md#listcommercialproducts) | **GET** /api/v1/commercial/products | List commercial products |
+| [**restoreCommercialProduct**](CommercialCatalogApi.md#restorecommercialproduct) | **POST** /api/v1/commercial/products/{productId}/restore | Restore a commercial product |
 | [**setMarketLink**](CommercialCatalogApi.md#setmarketlinkoperation) | **PUT** /api/v1/commercial/products/{commercial_product_id}/market-link | Set a market link |
 | [**updateCommercialPartner**](CommercialCatalogApi.md#updatecommercialpartneroperation) | **PATCH** /api/v1/commercial/partners/{partner_id} | Update a commercial partner |
 | [**updateCommercialProduct**](CommercialCatalogApi.md#updatecommercialproductoperation) | **PATCH** /api/v1/commercial/products/{commercial_product_id} | Update a commercial product |
 
+
+
+## archiveCommercialProduct
+
+> CommercialProductLifecycleEnvelope archiveCommercialProduct(idempotencyKey, productId)
+
+Archive a commercial product
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { ArchiveCommercialProductRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    productId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies ArchiveCommercialProductRequest;
+
+  try {
+    const data = await api.archiveCommercialProduct(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **productId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**CommercialProductLifecycleEnvelope**](CommercialProductLifecycleEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **404** | Resource not found |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## createCommercialPartner
@@ -757,6 +837,84 @@ example().catch(console.error);
 | **400** | Invalid request |  -  |
 | **401** | Invalid or expired API key |  -  |
 | **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## restoreCommercialProduct
+
+> CommercialProductLifecycleEnvelope restoreCommercialProduct(idempotencyKey, productId)
+
+Restore a commercial product
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { RestoreCommercialProductRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    productId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies RestoreCommercialProductRequest;
+
+  try {
+    const data = await api.restoreCommercialProduct(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **productId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**CommercialProductLifecycleEnvelope**](CommercialProductLifecycleEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **404** | Resource not found |  -  |
 | **409** | Conflict or idempotency mismatch |  -  |
 | **429** | Rate or concurrency limit exceeded |  -  |
 

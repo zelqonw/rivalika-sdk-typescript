@@ -4,7 +4,7 @@
   "outputDir": ".",
   "additionalProperties": {
     "npmName": "@rivalika/sdk",
-    "npmVersion": "1.0.0-beta.1",
+    "npmVersion": "1.0.0-beta.2",
     "supportsES6": true,
     "useSingleRequestParameter": true,
     "withInterfaces": true,
