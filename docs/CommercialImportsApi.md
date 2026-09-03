@@ -360,7 +360,7 @@ async function example() {
   const api = new CommercialImportsApi(config);
 
   const body = {
-    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    // string | Unique key retained for 900 seconds. Reusing a key with another payload returns 409.
     idempotencyKey: idempotencyKey_example,
     // PrepareCommercialImportUploadRequest
     prepareCommercialImportUploadRequest: ...,
@@ -383,7 +383,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **idempotencyKey** | `string` | Unique key retained for 900 seconds. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
 | **prepareCommercialImportUploadRequest** | [PrepareCommercialImportUploadRequest](PrepareCommercialImportUploadRequest.md) |  | |
 
 ### Return type

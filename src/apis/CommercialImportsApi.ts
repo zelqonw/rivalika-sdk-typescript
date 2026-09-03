@@ -203,7 +203,7 @@ export interface CommercialImportsApiInterface {
 
     /**
      * Creates request options for prepareCommercialImportUpload without sending the request
-     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} idempotencyKey Unique key retained for 900 seconds. Reusing a key with another payload returns 409.
      * @param {PrepareCommercialImportUploadRequest} prepareCommercialImportUploadRequest 
      * @throws {RequiredError}
      * @memberof CommercialImportsApiInterface
@@ -213,7 +213,7 @@ export interface CommercialImportsApiInterface {
     /**
      * 
      * @summary Prepare a commercial import upload
-     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} idempotencyKey Unique key retained for 900 seconds. Reusing a key with another payload returns 409.
      * @param {PrepareCommercialImportUploadRequest} prepareCommercialImportUploadRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

@@ -4572,7 +4572,7 @@
             "name": "Idempotency-Key",
             "in": "header",
             "required": true,
-            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "description": "Unique key retained for 900 seconds. Reusing a key with another payload returns 409.",
             "schema": {
               "type": "string",
               "minLength": 1,
