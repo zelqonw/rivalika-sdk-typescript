@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Rivalika Public API",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.2",
     "description": "Stable business integration API for Rivalika customers.",
     "license": {
       "name": "Apache-2.0",
@@ -64,7 +64,6 @@
       "RivalikaApiKey": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "Rivalika API key",
         "description": "Use an API key created in Settings → API."
       }
     },
@@ -178,6 +177,221 @@
               "status"
             ],
             "additionalProperties": {}
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CommercialImportPreparedUploadEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "storage_key": {
+                "type": "string"
+              },
+              "upload_url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "upload_headers": {
+                "type": "object",
+                "properties": {
+                  "Content-Type": {
+                    "type": "string"
+                  },
+                  "x-amz-checksum-sha256": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "Content-Type",
+                  "x-amz-checksum-sha256"
+                ],
+                "additionalProperties": false
+              },
+              "expires_in_seconds": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 900
+              }
+            },
+            "required": [
+              "storage_key",
+              "upload_url",
+              "upload_headers",
+              "expires_in_seconds"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CommercialImportDetailEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "products",
+                  "partners",
+                  "supplier_offers",
+                  "price_books"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "queued",
+                  "processing",
+                  "completed",
+                  "failed",
+                  "cancelled"
+                ]
+              },
+              "file_name": {
+                "type": "string"
+              },
+              "dry_run": {
+                "type": "boolean"
+              },
+              "sheet_name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "total_rows": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "imported_rows": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "rejected_rows": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "last_processed_row": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "has_error_report": {
+                "type": "boolean"
+              },
+              "failure_summary": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 160
+              },
+              "row_errors": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "row_number": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "maxLength": 160
+                    }
+                  },
+                  "required": [
+                    "row_number",
+                    "message"
+                  ]
+                },
+                "maxItems": 100
+              },
+              "row_errors_truncated": {
+                "type": "boolean"
+              },
+              "started_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "completed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "status",
+              "file_name",
+              "dry_run",
+              "sheet_name",
+              "total_rows",
+              "imported_rows",
+              "rejected_rows",
+              "last_processed_row",
+              "has_error_report",
+              "failure_summary",
+              "row_errors",
+              "row_errors_truncated",
+              "started_at",
+              "completed_at",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CommercialProductLifecycleEnvelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "product_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "archived"
+                ]
+              }
+            },
+            "required": [
+              "product_id",
+              "status"
+            ]
           }
         },
         "required": [
@@ -2587,6 +2801,226 @@
         }
       }
     },
+    "/api/v1/commercial/products/{productId}/archive": {
+      "post": {
+        "operationId": "archiveCommercialProduct",
+        "summary": "Archive a commercial product",
+        "tags": [
+          "Commercial Catalog"
+        ],
+        "security": [
+          {
+            "RivalikaApiKey": [
+              "commercial_catalog:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "productId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialProductLifecycleEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/products/{productId}/restore": {
+      "post": {
+        "operationId": "restoreCommercialProduct",
+        "summary": "Restore a commercial product",
+        "tags": [
+          "Commercial Catalog"
+        ],
+        "security": [
+          {
+            "RivalikaApiKey": [
+              "commercial_catalog:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "productId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialProductLifecycleEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/commercial/products/{commercial_product_id}": {
       "get": {
         "operationId": "getCommercialProduct",
@@ -4088,6 +4522,228 @@
           },
           "403": {
             "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/imports/prepare-upload": {
+      "post": {
+        "operationId": "prepareCommercialImportUpload",
+        "summary": "Prepare a commercial import upload",
+        "tags": [
+          "Commercial Imports"
+        ],
+        "security": [
+          {
+            "RivalikaApiKey": [
+              "commercial_imports:write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 900 seconds. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fileName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240,
+                    "pattern": "^.*\\.(?:[cC][sS][vV]|[xX][lL][sS][xX])$"
+                  },
+                  "contentSha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "sizeBytes": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 26214400
+                  }
+                },
+                "required": [
+                  "fileName",
+                  "contentSha256",
+                  "sizeBytes"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialImportPreparedUploadEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/imports/{importId}": {
+      "get": {
+        "operationId": "getCommercialImport",
+        "summary": "Get a commercial import",
+        "tags": [
+          "Commercial Imports"
+        ],
+        "security": [
+          {
+            "RivalikaApiKey": [
+              "commercial_imports:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "importId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommercialImportDetailEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
             "content": {
               "application/problem+json": {
                 "schema": {

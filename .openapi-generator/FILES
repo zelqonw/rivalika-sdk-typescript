@@ -6,7 +6,15 @@ docs/AlertsApi.md
 docs/ApplyRepricerRecommendationRequest.md
 docs/CatalogApi.md
 docs/CommercialCatalogApi.md
+docs/CommercialImportDetailEnvelope.md
+docs/CommercialImportDetailEnvelopeData.md
+docs/CommercialImportDetailEnvelopeDataRowErrorsInner.md
+docs/CommercialImportPreparedUploadEnvelope.md
+docs/CommercialImportPreparedUploadEnvelopeData.md
+docs/CommercialImportPreparedUploadEnvelopeDataUploadHeaders.md
 docs/CommercialImportsApi.md
+docs/CommercialProductLifecycleEnvelope.md
+docs/CommercialProductLifecycleEnvelopeData.md
 docs/ContextApi.md
 docs/CreateAlertRuleRequest.md
 docs/CreateCommercialImportRequest.md
@@ -24,6 +32,7 @@ docs/EstimateExportRequest.md
 docs/ExportsApi.md
 docs/ListEnvelope.md
 docs/ListEnvelopePage.md
+docs/PrepareCommercialImportUploadRequest.md
 docs/PricingApi.md
 docs/Problem.md
 docs/ReceiveRivalikaWebhookRequest.md
@@ -53,6 +62,14 @@ src/apis/index.ts
 src/models/AcceptedEnvelope.ts
 src/models/AcceptedEnvelopeData.ts
 src/models/ApplyRepricerRecommendationRequest.ts
+src/models/CommercialImportDetailEnvelope.ts
+src/models/CommercialImportDetailEnvelopeData.ts
+src/models/CommercialImportDetailEnvelopeDataRowErrorsInner.ts
+src/models/CommercialImportPreparedUploadEnvelope.ts
+src/models/CommercialImportPreparedUploadEnvelopeData.ts
+src/models/CommercialImportPreparedUploadEnvelopeDataUploadHeaders.ts
+src/models/CommercialProductLifecycleEnvelope.ts
+src/models/CommercialProductLifecycleEnvelopeData.ts
 src/models/CreateAlertRuleRequest.ts
 src/models/CreateCommercialImportRequest.ts
 src/models/CreateCommercialPartnerRequest.ts
@@ -68,6 +85,7 @@ src/models/DeleteCommercialProductRequest.ts
 src/models/EstimateExportRequest.ts
 src/models/ListEnvelope.ts
 src/models/ListEnvelopePage.ts
+src/models/PrepareCommercialImportUploadRequest.ts
 src/models/Problem.ts
 src/models/ReceiveRivalikaWebhookRequest.ts
 src/models/SetMarketLinkRequest.ts
