@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import {
   CommercialCatalogApi,
   CommercialImportDetailEnvelopeFromJSON,
@@ -19,6 +21,16 @@ const importId = '22222222-2222-4222-8222-222222222222'
 const configuration = new Configuration({ accessToken: apiKey })
 
 describe('commercial import upload and detail contracts', () => {
+  it('preserves the 160-character import row error message limit in the bundled contract', () => {
+    const contract = JSON.parse(
+      readFileSync(resolve('openapi/rivalika-public-api.json'), 'utf8'),
+    )
+    const rowError =
+      contract.components.schemas.CommercialImportDetailEnvelope.properties.data.properties.row_errors.items
+
+    expect(rowError.properties.message.maxLength).toBe(160)
+  })
+
   it('serializes a prepare-upload request with authentication and idempotency', async () => {
     const request = await new CommercialImportsApi(configuration).prepareCommercialImportUploadRequestOpts({
       idempotencyKey,
