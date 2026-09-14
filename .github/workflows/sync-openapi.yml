@@ -1,18 +1,18 @@
 name: Sync OpenAPI
 
 # The monorepo sends this when its public API spec changes on main.
-# GitLab did it with a cross-project pipeline trigger and JOB-TOKEN; GitHub
-# has no equivalent, so the monorepo dispatches and this regenerates.
+#
+# GitLab did it with a cross-project pipeline trigger authenticated by
+# JOB-TOKEN. GitHub has no equivalent, so the monorepo dispatches and this
+# regenerates. The spec is ~256 KB, well over the 64 KB a client_payload can
+# carry, so the payload names the commit and this job fetches it.
 on:
   repository_dispatch:
     types: [openapi-updated]
   workflow_dispatch:
     inputs:
-      spec_url:
-        description: Raw URL of the OpenAPI document
-        required: true
       spec_sha:
-        description: Monorepo commit the spec came from
+        description: Monorepo commit to generate from
         required: true
 
 permissions:
@@ -21,6 +21,10 @@ permissions:
 concurrency:
   group: sync-openapi
   cancel-in-progress: false
+
+env:
+  SPEC_REPO: zelqonw/rivalika
+  SPEC_PATH: packages/contracts/openapi/generated/rivalika-public-api.json
 
 jobs:
   regenerate:
@@ -35,26 +39,30 @@ jobs:
       - name: resolve the request
         id: request
         env:
-          URL: ${{ github.event.client_payload.spec_url || inputs.spec_url }}
           SHA: ${{ github.event.client_payload.spec_sha || inputs.spec_sha }}
         run: |
-          test -n "$URL" || { echo 'spec_url is required' >&2; exit 1; }
           test -n "$SHA" || { echo 'spec_sha is required' >&2; exit 1; }
-          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          case "$SHA" in
+            *[!0-9a-f]* | "") echo "spec_sha must be a hex commit sha: $SHA" >&2; exit 1 ;;
+          esac
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-          echo "short=${SHA:0:12}" >> "$GITHUB_OUTPUT"
+          echo "short=$(printf '%.12s' "$SHA")" >> "$GITHUB_OUTPUT"
 
       - name: fetch the spec
         env:
-          URL: ${{ steps.request.outputs.url }}
-          TOKEN: ${{ secrets.MONOREPO_READ_TOKEN }}
+          # The monorepo is private, so this needs a token of its own. It is
+          # read from a secret, never from the dispatch payload -- anyone who
+          # can read a workflow run can read client_payload.
+          GH_TOKEN: ${{ secrets.MONOREPO_READ_TOKEN }}
+          SHA: ${{ steps.request.outputs.sha }}
         run: |
-          # The monorepo is private, so the raw URL needs a token. The
-          # dispatch cannot carry one -- client_payload is readable by
-          # anyone who can read the workflow run.
-          curl --fail --silent --show-error --location \
-            ${TOKEN:+--header "Authorization: Bearer ${TOKEN}"} \
-            "$URL" --output openapi/rivalika-public-api.json
+          test -n "$GH_TOKEN" || {
+            echo 'MONOREPO_READ_TOKEN is not set; this repository cannot read the spec.' >&2
+            exit 1
+          }
+          gh api "repos/${SPEC_REPO}/contents/${SPEC_PATH}?ref=${SHA}" \
+            --header 'Accept: application/vnd.github.raw' \
+            > openapi/rivalika-public-api.json
           python3 -m json.tool openapi/rivalika-public-api.json > /dev/null
 
       - name: regenerate
@@ -73,11 +81,11 @@ jobs:
           title: 'chore: regenerate from OpenAPI ${{ steps.request.outputs.short }}'
           body: |
             Generated from the monorepo's public API spec at
-            `${{ steps.request.outputs.sha }}`.
+            [`${{ steps.request.outputs.short }}`](https://github.com/zelqonw/rivalika/commit/${{ steps.request.outputs.sha }}).
 
-            The SDK is generated code. Review this the way you would review
-            the API change that caused it: what moved, what disappeared, and
-            whether anything here is a break for somebody already on the
-            previous version.
+            The SDK is generated code. Review this the way you would review the
+            API change that caused it: what moved, what disappeared, and
+            whether anything here breaks somebody already on the previous
+            version.
 
-            A no-op sync opens no pull request at all.
+            A sync that changes nothing opens no pull request at all.
