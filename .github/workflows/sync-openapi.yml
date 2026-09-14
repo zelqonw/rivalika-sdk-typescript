@@ -1,0 +1,83 @@
+name: Sync OpenAPI
+
+# The monorepo sends this when its public API spec changes on main.
+# GitLab did it with a cross-project pipeline trigger and JOB-TOKEN; GitHub
+# has no equivalent, so the monorepo dispatches and this regenerates.
+on:
+  repository_dispatch:
+    types: [openapi-updated]
+  workflow_dispatch:
+    inputs:
+      spec_url:
+        description: Raw URL of the OpenAPI document
+        required: true
+      spec_sha:
+        description: Monorepo commit the spec came from
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-openapi
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    name: regenerate and open a pull request
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: resolve the request
+        id: request
+        env:
+          URL: ${{ github.event.client_payload.spec_url || inputs.spec_url }}
+          SHA: ${{ github.event.client_payload.spec_sha || inputs.spec_sha }}
+        run: |
+          test -n "$URL" || { echo 'spec_url is required' >&2; exit 1; }
+          test -n "$SHA" || { echo 'spec_sha is required' >&2; exit 1; }
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "short=${SHA:0:12}" >> "$GITHUB_OUTPUT"
+
+      - name: fetch the spec
+        env:
+          URL: ${{ steps.request.outputs.url }}
+          TOKEN: ${{ secrets.MONOREPO_READ_TOKEN }}
+        run: |
+          # The monorepo is private, so the raw URL needs a token. The
+          # dispatch cannot carry one -- client_payload is readable by
+          # anyone who can read the workflow run.
+          curl --fail --silent --show-error --location \
+            ${TOKEN:+--header "Authorization: Bearer ${TOKEN}"} \
+            "$URL" --output openapi/rivalika-public-api.json
+          python3 -m json.tool openapi/rivalika-public-api.json > /dev/null
+
+      - name: regenerate
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work \
+            --entrypoint openapi-generator-cli \
+            openapitools/openapi-generator-cli:v7.22.0 \
+            generate -c openapi-generator-config.json
+
+      - name: open a pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/openapi-${{ steps.request.outputs.short }}
+          delete-branch: true
+          commit-message: 'chore: regenerate from OpenAPI ${{ steps.request.outputs.short }}'
+          title: 'chore: regenerate from OpenAPI ${{ steps.request.outputs.short }}'
+          body: |
+            Generated from the monorepo's public API spec at
+            `${{ steps.request.outputs.sha }}`.
+
+            The SDK is generated code. Review this the way you would review
+            the API change that caused it: what moved, what disappeared, and
+            whether anything here is a break for somebody already on the
+            previous version.
+
+            A no-op sync opens no pull request at all.

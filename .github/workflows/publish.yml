@@ -1,0 +1,48 @@
+name: Publish
+
+# Publishing is a tag decision, not a branch decision.
+#
+# The GitLab pipeline this replaces was pinned to one literal tag
+# (v1.0.0-beta.1), so shipping any later version meant editing CI. Neither
+# that tag nor the package ever made it out. `v*` is the rule that was
+# intended.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: npm
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      # Trusted publishing: npm mints a short-lived credential from this
+      # token. There is no NPM_TOKEN to leak or rotate.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: npm must be new enough to publish with OIDC
+        run: |
+          npm install -g npm@latest
+          npm --version
+      - run: npm ci
+      - run: npm run check
+      - name: the tag must match the manifest
+        # A tag that disagrees with package.json publishes a version nobody
+        # asked for, under a name the tag does not describe.
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          MANIFEST="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$MANIFEST" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match package.json ${MANIFEST}" >&2
+            exit 1
+          fi
+      - run: npm publish

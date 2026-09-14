@@ -1,0 +1,47 @@
+name: Verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: tests and package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  drift:
+    name: generation drift
+    runs-on: ubuntu-latest
+    # The SDK is generated, not written. If the committed tree and a fresh
+    # generation from the same spec disagree, someone hand-edited generated
+    # code and the next sync would silently revert them.
+    container:
+      image: openapitools/openapi-generator-cli:v7.22.0
+      options: --entrypoint ''
+    steps:
+      - uses: actions/checkout@v6
+      - name: install git
+        run: apt-get update -qq && apt-get install -y -qq git
+      - name: regenerate
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          openapi-generator-cli generate -c openapi-generator-config.json
+      - name: the tree must be unchanged
+        run: git diff --exit-code

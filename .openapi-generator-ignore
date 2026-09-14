@@ -28,6 +28,7 @@ LICENSE
 SECURITY.md
 CONTRIBUTING.md
 .gitlab-ci.yml
+.github/**
 openapi-generator-config.json
 test/**
 src/webhooks.ts

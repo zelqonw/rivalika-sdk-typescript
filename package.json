@@ -5,7 +5,7 @@
   "author": "ZelqonWorks",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/zelqonworks/rivalika-sdk-typescript.git"
+    "url": "git+https://github.com/zelqonw/rivalika-sdk-typescript.git"
   },
   "license": "Apache-2.0",
   "main": "./dist/index.js",
