@@ -1,30 +1,34 @@
 
-# ListEnvelopePage
+# UpdateReportRequest
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`page` | number
-`size` | number
-`total` | number
-`hasMore` | boolean
-`nextCursor` | string
+`timezone` | string
+`type` | string
+`name` | string
+`locale` | string
+`schedule` | { [key: string]: any; }
+`isActive` | boolean
+`_configuration` | { [key: string]: any; }
 
 ## Example
 
 ```typescript
-import type { ListEnvelopePage } from '@rivalika/sdk'
+import type { UpdateReportRequest } from '@rivalika/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
-  "page": null,
-  "size": null,
-  "total": null,
-  "hasMore": null,
-  "nextCursor": null,
-} satisfies ListEnvelopePage
+  "timezone": null,
+  "type": null,
+  "name": null,
+  "locale": null,
+  "schedule": null,
+  "isActive": null,
+  "_configuration": null,
+} satisfies UpdateReportRequest
 
 console.log(example)
 
@@ -33,7 +37,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ListEnvelopePage
+const exampleParsed = JSON.parse(exampleJSON) as UpdateReportRequest
 console.log(exampleParsed)
 ```
 

@@ -1,30 +1,24 @@
 
-# ListEnvelopePage
+# SetAlertRuleRecipientsRequestRecipientsInner
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`page` | number
-`size` | number
-`total` | number
-`hasMore` | boolean
-`nextCursor` | string
+`userId` | string
+`notifyEmail` | boolean
 
 ## Example
 
 ```typescript
-import type { ListEnvelopePage } from '@rivalika/sdk'
+import type { SetAlertRuleRecipientsRequestRecipientsInner } from '@rivalika/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
-  "page": null,
-  "size": null,
-  "total": null,
-  "hasMore": null,
-  "nextCursor": null,
-} satisfies ListEnvelopePage
+  "userId": null,
+  "notifyEmail": null,
+} satisfies SetAlertRuleRecipientsRequestRecipientsInner
 
 console.log(example)
 
@@ -33,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ListEnvelopePage
+const exampleParsed = JSON.parse(exampleJSON) as SetAlertRuleRecipientsRequestRecipientsInner
 console.log(exampleParsed)
 ```
 

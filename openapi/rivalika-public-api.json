@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Rivalika Public API",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "description": "Stable business integration API for Rivalika customers.",
     "license": {
       "name": "Apache-2.0",
@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://api.rivalika.com",
+      "url": "https://api.rivalika.md",
       "description": "Production"
     }
   ],
@@ -94,13 +94,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "type",
-          "title",
-          "status",
-          "request_id",
-          "code"
-        ]
+        "required": ["type", "title", "status", "request_id", "code"]
       },
       "DataEnvelope": {
         "type": "object",
@@ -111,9 +105,7 @@
             "additionalProperties": {}
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       },
       "ListEnvelope": {
         "type": "object",
@@ -143,20 +135,16 @@
               },
               "has_more": {
                 "type": "boolean"
+              },
+              "next_cursor": {
+                "type": ["string", "null"],
+                "format": "uuid"
               }
             },
-            "required": [
-              "page",
-              "size",
-              "total",
-              "has_more"
-            ]
+            "required": ["page", "size", "total", "has_more"]
           }
         },
-        "required": [
-          "data",
-          "page"
-        ]
+        "required": ["data", "page"]
       },
       "AcceptedEnvelope": {
         "type": "object",
@@ -172,16 +160,11 @@
                 "type": "string"
               }
             },
-            "required": [
-              "id",
-              "status"
-            ],
+            "required": ["id", "status"],
             "additionalProperties": {}
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       },
       "CommercialImportPreparedUploadEnvelope": {
         "type": "object",
@@ -206,10 +189,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "Content-Type",
-                  "x-amz-checksum-sha256"
-                ],
+                "required": ["Content-Type", "x-amz-checksum-sha256"],
                 "additionalProperties": false
               },
               "expires_in_seconds": {
@@ -218,17 +198,10 @@
                 "maximum": 900
               }
             },
-            "required": [
-              "storage_key",
-              "upload_url",
-              "upload_headers",
-              "expires_in_seconds"
-            ]
+            "required": ["storage_key", "upload_url", "upload_headers", "expires_in_seconds"]
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       },
       "CommercialImportDetailEnvelope": {
         "type": "object",
@@ -242,22 +215,11 @@
               },
               "kind": {
                 "type": "string",
-                "enum": [
-                  "products",
-                  "partners",
-                  "supplier_offers",
-                  "price_books"
-                ]
+                "enum": ["products", "partners", "supplier_offers", "price_books"]
               },
               "status": {
                 "type": "string",
-                "enum": [
-                  "queued",
-                  "processing",
-                  "completed",
-                  "failed",
-                  "cancelled"
-                ]
+                "enum": ["queued", "processing", "completed", "failed", "cancelled"]
               },
               "file_name": {
                 "type": "string"
@@ -266,10 +228,7 @@
                 "type": "boolean"
               },
               "sheet_name": {
-                "type": [
-                  "string",
-                  "null"
-                ]
+                "type": ["string", "null"]
               },
               "total_rows": {
                 "type": "integer",
@@ -291,10 +250,7 @@
                 "type": "boolean"
               },
               "failure_summary": {
-                "type": [
-                  "string",
-                  "null"
-                ],
+                "type": ["string", "null"],
                 "maxLength": 160
               },
               "row_errors": {
@@ -311,10 +267,7 @@
                       "maxLength": 160
                     }
                   },
-                  "required": [
-                    "row_number",
-                    "message"
-                  ]
+                  "required": ["row_number", "message"]
                 },
                 "maxItems": 100
               },
@@ -322,17 +275,11 @@
                 "type": "boolean"
               },
               "started_at": {
-                "type": [
-                  "string",
-                  "null"
-                ],
+                "type": ["string", "null"],
                 "format": "date-time"
               },
               "completed_at": {
-                "type": [
-                  "string",
-                  "null"
-                ],
+                "type": ["string", "null"],
                 "format": "date-time"
               },
               "created_at": {
@@ -366,9 +313,7 @@
             ]
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       },
       "CommercialProductLifecycleEnvelope": {
         "type": "object",
@@ -382,21 +327,13 @@
               },
               "status": {
                 "type": "string",
-                "enum": [
-                  "active",
-                  "archived"
-                ]
+                "enum": ["active", "archived"]
               }
             },
-            "required": [
-              "product_id",
-              "status"
-            ]
+            "required": ["product_id", "status"]
           }
         },
-        "required": [
-          "data"
-        ]
+        "required": ["data"]
       }
     },
     "parameters": {}
@@ -406,14 +343,10 @@
       "get": {
         "operationId": "getContext",
         "summary": "Get API principal context",
-        "tags": [
-          "Context"
-        ],
+        "tags": ["Context"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "stores:read"
-            ]
+            "RivalikaApiKey": ["stores:read"]
           }
         ],
         "responses": {
@@ -484,14 +417,10 @@
       "get": {
         "operationId": "listStores",
         "summary": "List monitored stores",
-        "tags": [
-          "Stores"
-        ],
+        "tags": ["Stores"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "stores:read"
-            ]
+            "RivalikaApiKey": ["stores:read"]
           }
         ],
         "parameters": [
@@ -592,14 +521,10 @@
       "get": {
         "operationId": "getStore",
         "summary": "Get a monitored store",
-        "tags": [
-          "Stores"
-        ],
+        "tags": ["Stores"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "stores:read"
-            ]
+            "RivalikaApiKey": ["stores:read"]
           }
         ],
         "parameters": [
@@ -681,14 +606,10 @@
       "post": {
         "operationId": "trackStore",
         "summary": "Track a store",
-        "tags": [
-          "Stores"
-        ],
+        "tags": ["Stores"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "stores:write"
-            ]
+            "RivalikaApiKey": ["stores:write"]
           }
         ],
         "parameters": [
@@ -779,14 +700,10 @@
       "delete": {
         "operationId": "untrackStore",
         "summary": "Stop tracking a store",
-        "tags": [
-          "Stores"
-        ],
+        "tags": ["Stores"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "stores:write"
-            ]
+            "RivalikaApiKey": ["stores:write"]
           }
         ],
         "parameters": [
@@ -879,14 +796,10 @@
       "get": {
         "operationId": "listProducts",
         "summary": "List published products",
-        "tags": [
-          "Catalog"
-        ],
+        "tags": ["Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "catalog:read"
-            ]
+            "RivalikaApiKey": ["catalog:read"]
           }
         ],
         "parameters": [
@@ -972,10 +885,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "discounted",
@@ -983,10 +893,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "includeOffers",
@@ -1071,14 +978,10 @@
       "get": {
         "operationId": "getProductFacets",
         "summary": "Get product facets",
-        "tags": [
-          "Catalog"
-        ],
+        "tags": ["Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "catalog:read"
-            ]
+            "RivalikaApiKey": ["catalog:read"]
           }
         ],
         "responses": {
@@ -1149,14 +1052,10 @@
       "get": {
         "operationId": "getProduct",
         "summary": "Get a published product",
-        "tags": [
-          "Catalog"
-        ],
+        "tags": ["Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "catalog:read"
-            ]
+            "RivalikaApiKey": ["catalog:read"]
           }
         ],
         "parameters": [
@@ -1238,103 +1137,10 @@
       "get": {
         "operationId": "listProductListings",
         "summary": "List product store offers",
-        "tags": [
-          "Catalog"
-        ],
+        "tags": ["Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "catalog:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "name": "product_id",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListEnvelope"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid or expired API key",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Missing required scope",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict or idempotency mismatch",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Rate or concurrency limit exceeded",
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/products/{product_id}/price-history": {
-      "get": {
-        "operationId": "getProductPriceHistory",
-        "summary": "Get product price history",
-        "tags": [
-          "Pricing"
-        ],
-        "security": [
-          {
-            "RivalikaApiKey": [
-              "pricing:read"
-            ]
+            "RivalikaApiKey": ["catalog:read"]
           }
         ],
         "parameters": [
@@ -1412,18 +1218,99 @@
         }
       }
     },
+    "/api/v1/products/{product_id}/price-history": {
+      "get": {
+        "operationId": "getProductPriceHistory",
+        "summary": "Get product price history",
+        "tags": ["Pricing"],
+        "security": [
+          {
+            "RivalikaApiKey": ["pricing:read"]
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "product_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/alert-rules": {
       "get": {
         "operationId": "listAlertRules",
         "summary": "List alert rules",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:read"
-            ]
+            "RivalikaApiKey": ["alerts:read"]
           }
         ],
         "parameters": [
@@ -1457,10 +1344,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "isActive",
@@ -1541,14 +1425,10 @@
       "post": {
         "operationId": "createAlertRule",
         "summary": "Create an alert rule",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:write"
-            ]
+            "RivalikaApiKey": ["alerts:write"]
           }
         ],
         "parameters": [
@@ -1575,17 +1455,11 @@
                     "type": "string"
                   },
                   "productId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                   },
                   "productName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 512
                   },
                   "storeIds": {
@@ -1610,17 +1484,11 @@
                     }
                   },
                   "thresholdPrice": {
-                    "type": [
-                      "number",
-                      "null"
-                    ],
+                    "type": ["number", "null"],
                     "exclusiveMinimum": 0
                   },
                   "thresholdPercent": {
-                    "type": [
-                      "number",
-                      "null"
-                    ],
+                    "type": ["number", "null"],
                     "exclusiveMinimum": 0,
                     "maximum": 100
                   },
@@ -1631,9 +1499,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "condition"
-                ],
+                "required": ["condition"],
                 "additionalProperties": {}
               }
             }
@@ -1707,14 +1573,10 @@
       "get": {
         "operationId": "getAlertRule",
         "summary": "Get an alert rule",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:read"
-            ]
+            "RivalikaApiKey": ["alerts:read"]
           }
         ],
         "parameters": [
@@ -1794,14 +1656,10 @@
       "patch": {
         "operationId": "updateAlertRule",
         "summary": "Update an alert rule",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:write"
-            ]
+            "RivalikaApiKey": ["alerts:write"]
           }
         ],
         "parameters": [
@@ -1834,17 +1692,11 @@
                 "type": "object",
                 "properties": {
                   "productId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                   },
                   "productName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 512
                   },
                   "storeIds": {
@@ -1872,17 +1724,11 @@
                     "type": "string"
                   },
                   "thresholdPrice": {
-                    "type": [
-                      "number",
-                      "null"
-                    ],
+                    "type": ["number", "null"],
                     "exclusiveMinimum": 0
                   },
                   "thresholdPercent": {
-                    "type": [
-                      "number",
-                      "null"
-                    ],
+                    "type": ["number", "null"],
                     "exclusiveMinimum": 0,
                     "maximum": 100
                   },
@@ -1966,14 +1812,10 @@
       "delete": {
         "operationId": "deleteAlertRule",
         "summary": "Delete an alert rule",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:write"
-            ]
+            "RivalikaApiKey": ["alerts:write"]
           }
         ],
         "parameters": [
@@ -2066,14 +1908,10 @@
       "get": {
         "operationId": "listAlertEvents",
         "summary": "List alert events",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:read"
-            ]
+            "RivalikaApiKey": ["alerts:read"]
           }
         ],
         "parameters": [
@@ -2107,10 +1945,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "acknowledged",
@@ -2203,14 +2038,10 @@
       "get": {
         "operationId": "getAlertSettings",
         "summary": "Get alert settings",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:read"
-            ]
+            "RivalikaApiKey": ["alerts:read"]
           }
         ],
         "responses": {
@@ -2279,14 +2110,10 @@
       "put": {
         "operationId": "updateAlertSettings",
         "summary": "Update alert settings",
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "alerts:write"
-            ]
+            "RivalikaApiKey": ["alerts:write"]
           }
         ],
         "parameters": [
@@ -2313,16 +2140,10 @@
                     "type": "boolean"
                   },
                   "quietHoursStartUtc": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   },
                   "quietHoursEndUtc": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   }
                 }
               }
@@ -2397,14 +2218,10 @@
       "get": {
         "operationId": "listCommercialProducts",
         "summary": "List commercial products",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:read"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:read"]
           }
         ],
         "parameters": [
@@ -2476,10 +2293,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -2488,10 +2302,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -2508,10 +2319,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ],
+              "type": ["number", "null"],
               "minimum": 0
             },
             "required": false,
@@ -2520,10 +2328,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ],
+              "type": ["number", "null"],
               "minimum": 0
             },
             "required": false,
@@ -2632,14 +2437,10 @@
       "post": {
         "operationId": "createCommercialProduct",
         "summary": "Create a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -2668,59 +2469,35 @@
                     "maxLength": 240
                   },
                   "parentProductId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                   },
                   "brand": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "category": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "internalSku": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "externalSku": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "barcode": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "stockQuantity": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
+                    "type": ["integer", "null"],
                     "minimum": 0
                   },
                   "stockThreshold": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
+                    "type": ["integer", "null"],
                     "minimum": 0
                   },
                   "attributes": {
@@ -2730,9 +2507,7 @@
                     }
                   }
                 },
-                "required": [
-                  "name"
-                ]
+                "required": ["name"]
               }
             }
           }
@@ -2805,14 +2580,10 @@
       "post": {
         "operationId": "archiveCommercialProduct",
         "summary": "Archive a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -2915,14 +2686,10 @@
       "post": {
         "operationId": "restoreCommercialProduct",
         "summary": "Restore a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3025,14 +2792,10 @@
       "get": {
         "operationId": "getCommercialProduct",
         "summary": "Get a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:read"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:read"]
           }
         ],
         "parameters": [
@@ -3112,14 +2875,10 @@
       "patch": {
         "operationId": "updateCommercialProduct",
         "summary": "Update a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3157,59 +2916,35 @@
                     "maxLength": 240
                   },
                   "parentProductId": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uuid"
                   },
                   "brand": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "category": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "internalSku": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "externalSku": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "barcode": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 120
                   },
                   "stockQuantity": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
+                    "type": ["integer", "null"],
                     "minimum": 0
                   },
                   "stockThreshold": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
+                    "type": ["integer", "null"],
                     "minimum": 0
                   },
                   "attributes": {
@@ -3289,14 +3024,10 @@
       "delete": {
         "operationId": "deleteCommercialProduct",
         "summary": "Delete a commercial product",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3330,15 +3061,10 @@
                 "properties": {
                   "childVariantAction": {
                     "type": "string",
-                    "enum": [
-                      "makeStandalone",
-                      "deleteChildren"
-                    ]
+                    "enum": ["makeStandalone", "deleteChildren"]
                   }
                 },
-                "required": [
-                  "childVariantAction"
-                ]
+                "required": ["childVariantAction"]
               }
             }
           }
@@ -3411,14 +3137,10 @@
       "get": {
         "operationId": "getMarketLink",
         "summary": "Get a market link",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:read"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:read"]
           }
         ],
         "parameters": [
@@ -3498,14 +3220,10 @@
       "put": {
         "operationId": "setMarketLink",
         "summary": "Set a market link",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3542,9 +3260,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": [
-                  "market_product_id"
-                ]
+                "required": ["market_product_id"]
               }
             }
           }
@@ -3615,14 +3331,10 @@
       "delete": {
         "operationId": "deleteMarketLink",
         "summary": "Remove a market link",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3715,14 +3427,10 @@
       "get": {
         "operationId": "listCommercialPartners",
         "summary": "List commercial partners",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:read"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:read"]
           }
         ],
         "parameters": [
@@ -3764,10 +3472,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "active",
@@ -3856,14 +3561,10 @@
       "post": {
         "operationId": "createCommercialPartner",
         "summary": "Create a commercial partner",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -3899,45 +3600,27 @@
                     "minItems": 1
                   },
                   "contactName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 240
                   },
                   "email": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "email"
                   },
                   "phone": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 80
                   },
                   "website": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uri"
                   },
                   "notes": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 4000
                   }
                 },
-                "required": [
-                  "name",
-                  "roles"
-                ]
+                "required": ["name", "roles"]
               }
             }
           }
@@ -4010,14 +3693,10 @@
       "get": {
         "operationId": "getCommercialPartner",
         "summary": "Get a commercial partner",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:read"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:read"]
           }
         ],
         "parameters": [
@@ -4097,14 +3776,10 @@
       "patch": {
         "operationId": "updateCommercialPartner",
         "summary": "Update a commercial partner",
-        "tags": [
-          "Commercial Catalog"
-        ],
+        "tags": ["Commercial Catalog"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_catalog:write"
-            ]
+            "RivalikaApiKey": ["commercial_catalog:write"]
           }
         ],
         "parameters": [
@@ -4149,38 +3824,23 @@
                     "minItems": 1
                   },
                   "contactName": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 240
                   },
                   "email": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "email"
                   },
                   "phone": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 80
                   },
                   "website": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "uri"
                   },
                   "notes": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "maxLength": 4000
                   },
                   "active": {
@@ -4259,14 +3919,10 @@
       "get": {
         "operationId": "listCommercialImports",
         "summary": "List commercial imports",
-        "tags": [
-          "Commercial Imports"
-        ],
+        "tags": ["Commercial Imports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_imports:read"
-            ]
+            "RivalikaApiKey": ["commercial_imports:read"]
           }
         ],
         "parameters": [
@@ -4316,10 +3972,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "dryRun",
@@ -4408,14 +4061,10 @@
       "post": {
         "operationId": "createCommercialImport",
         "summary": "Create a commercial import",
-        "tags": [
-          "Commercial Imports"
-        ],
+        "tags": ["Commercial Imports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_imports:write"
-            ]
+            "RivalikaApiKey": ["commercial_imports:write"]
           }
         ],
         "parameters": [
@@ -4470,21 +4119,21 @@
                   },
                   "autoMatchEnabled": {
                     "type": "boolean",
-                    "enum": [
-                      false
-                    ]
+                    "enum": [false]
+                  },
+                  "validationImportIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "maxItems": 200
                   },
                   "dryRun": {
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "kind",
-                  "fileName",
-                  "storageKey",
-                  "contentSha256",
-                  "sizeBytes"
-                ]
+                "required": ["kind", "fileName", "storageKey", "contentSha256", "sizeBytes"]
               }
             }
           }
@@ -4557,14 +4206,10 @@
       "post": {
         "operationId": "prepareCommercialImportUpload",
         "summary": "Prepare a commercial import upload",
-        "tags": [
-          "Commercial Imports"
-        ],
+        "tags": ["Commercial Imports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_imports:write"
-            ]
+            "RivalikaApiKey": ["commercial_imports:write"]
           }
         ],
         "parameters": [
@@ -4603,11 +4248,7 @@
                     "maximum": 26214400
                   }
                 },
-                "required": [
-                  "fileName",
-                  "contentSha256",
-                  "sizeBytes"
-                ]
+                "required": ["fileName", "contentSha256", "sizeBytes"]
               }
             }
           }
@@ -4680,14 +4321,10 @@
       "get": {
         "operationId": "getCommercialImport",
         "summary": "Get a commercial import",
-        "tags": [
-          "Commercial Imports"
-        ],
+        "tags": ["Commercial Imports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_imports:read"
-            ]
+            "RivalikaApiKey": ["commercial_imports:read"]
           }
         ],
         "parameters": [
@@ -4779,14 +4416,10 @@
       "post": {
         "operationId": "cancelCommercialImport",
         "summary": "Cancel a commercial import",
-        "tags": [
-          "Commercial Imports"
-        ],
+        "tags": ["Commercial Imports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "commercial_imports:write"
-            ]
+            "RivalikaApiKey": ["commercial_imports:write"]
           }
         ],
         "parameters": [
@@ -4879,14 +4512,10 @@
       "get": {
         "operationId": "getRepricerSettings",
         "summary": "Get repricer settings",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "responses": {
@@ -4955,14 +4584,10 @@
       "put": {
         "operationId": "updateRepricerSettings",
         "summary": "Update repricer settings",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -5116,14 +4741,10 @@
       "get": {
         "operationId": "listRepricerPolicies",
         "summary": "List repricer policies",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "parameters": [
@@ -5157,10 +4778,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "enabled",
@@ -5199,10 +4817,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -5211,10 +4826,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -5312,14 +4924,10 @@
       "post": {
         "operationId": "createRepricerPolicy",
         "summary": "Create a repricer policy",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -5370,14 +4978,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "required": [
-                  "name",
-                  "enabled",
-                  "priority",
-                  "scope",
-                  "config",
-                  "guardrails"
-                ]
+                "required": ["name", "enabled", "priority", "scope", "config", "guardrails"]
               }
             }
           }
@@ -5450,14 +5051,10 @@
       "patch": {
         "operationId": "updateRepricerPolicy",
         "summary": "Update a repricer policy",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -5517,14 +5114,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "required": [
-                  "name",
-                  "enabled",
-                  "priority",
-                  "scope",
-                  "config",
-                  "guardrails"
-                ]
+                "required": ["name", "enabled", "priority", "scope", "config", "guardrails"]
               }
             }
           }
@@ -5595,14 +5185,10 @@
       "delete": {
         "operationId": "deleteRepricerPolicy",
         "summary": "Delete a repricer policy",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -5695,14 +5281,10 @@
       "get": {
         "operationId": "listRepricerExclusions",
         "summary": "List repricer exclusions",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "parameters": [
@@ -5736,10 +5318,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "enabled",
@@ -5874,14 +5453,10 @@
       "post": {
         "operationId": "createRepricerExclusion",
         "summary": "Create a repricer exclusion",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -5918,19 +5493,11 @@
                     "type": "boolean"
                   },
                   "expiresAt": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
+                    "type": ["string", "null"],
                     "format": "date-time"
                   }
                 },
-                "required": [
-                  "scope",
-                  "reason",
-                  "enabled",
-                  "expiresAt"
-                ]
+                "required": ["scope", "reason", "enabled", "expiresAt"]
               }
             }
           }
@@ -6000,17 +5567,137 @@
       }
     },
     "/api/v1/repricer/exclusions/{exclusion_id}": {
+      "patch": {
+        "operationId": "updateRepricerExclusion",
+        "summary": "Update a repricer exclusion",
+        "tags": ["Repricing"],
+        "security": [
+          {
+            "RivalikaApiKey": ["repricing:manage"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "exclusion_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "scope": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": {}
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "expiresAt": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                  }
+                },
+                "required": ["scope", "reason", "enabled", "expiresAt"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "operationId": "deleteRepricerExclusion",
         "summary": "Delete a repricer exclusion",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -6103,14 +5790,10 @@
       "get": {
         "operationId": "listRepricerRuns",
         "summary": "List repricer runs",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "parameters": [
@@ -6267,14 +5950,10 @@
       "post": {
         "operationId": "createRepricerRun",
         "summary": "Create a repricer run",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:manage"
-            ]
+            "RivalikaApiKey": ["repricing:manage"]
           }
         ],
         "parameters": [
@@ -6358,14 +6037,10 @@
       "get": {
         "operationId": "listRepricerRecommendations",
         "summary": "List repricer recommendations",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "parameters": [
@@ -6411,9 +6086,11 @@
               "items": {
                 "type": "string",
                 "format": "uuid"
-              }
+              },
+              "description": "Commercial product IDs, not shared market product IDs"
             },
             "required": false,
+            "description": "Commercial product IDs, not shared market product IDs",
             "name": "productIds",
             "in": "query"
           },
@@ -6462,10 +6139,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "required": false,
             "name": "movePercentMin",
@@ -6473,10 +6147,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ]
+              "type": ["number", "null"]
             },
             "required": false,
             "name": "movePercentMax",
@@ -6492,10 +6163,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ],
+              "type": ["number", "null"],
               "minimum": 0
             },
             "required": false,
@@ -6504,10 +6172,7 @@
           },
           {
             "schema": {
-              "type": [
-                "number",
-                "null"
-              ],
+              "type": ["number", "null"],
               "minimum": 0
             },
             "required": false,
@@ -6516,10 +6181,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -6528,10 +6190,7 @@
           },
           {
             "schema": {
-              "type": [
-                "integer",
-                "null"
-              ],
+              "type": ["integer", "null"],
               "minimum": 0
             },
             "required": false,
@@ -6652,14 +6311,10 @@
       "post": {
         "operationId": "applyRepricerRecommendation",
         "summary": "Apply a repricer recommendation",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:apply"
-            ]
+            "RivalikaApiKey": ["repricing:apply"]
           }
         ],
         "parameters": [
@@ -6771,14 +6426,10 @@
       "get": {
         "operationId": "listRepricerApplications",
         "summary": "List repricer applications",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "responses": {
@@ -6849,14 +6500,10 @@
       "post": {
         "operationId": "rollbackRepricerApplication",
         "summary": "Rollback a repricer application",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:apply"
-            ]
+            "RivalikaApiKey": ["repricing:apply"]
           }
         ],
         "parameters": [
@@ -6949,14 +6596,10 @@
       "get": {
         "operationId": "getRepricerAnalytics",
         "summary": "Get repricer analytics",
-        "tags": [
-          "Repricing"
-        ],
+        "tags": ["Repricing"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "repricing:read"
-            ]
+            "RivalikaApiKey": ["repricing:read"]
           }
         ],
         "parameters": [
@@ -7063,14 +6706,10 @@
       "get": {
         "operationId": "listReports",
         "summary": "List report definitions",
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "reports:read"
-            ]
+            "RivalikaApiKey": ["reports:read"]
           }
         ],
         "parameters": [
@@ -7120,10 +6759,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "isActive",
@@ -7131,10 +6767,7 @@
           },
           {
             "schema": {
-              "type": [
-                "boolean",
-                "null"
-              ]
+              "type": ["boolean", "null"]
             },
             "required": false,
             "name": "scheduled",
@@ -7207,14 +6840,10 @@
       "post": {
         "operationId": "createReport",
         "summary": "Create a report definition",
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "reports:write"
-            ]
+            "RivalikaApiKey": ["reports:write"]
           }
         ],
         "parameters": [
@@ -7265,10 +6894,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "type",
-                  "name"
-                ]
+                "required": ["type", "name"]
               }
             }
           }
@@ -7337,18 +6963,366 @@
         }
       }
     },
+    "/api/v1/alert-rules/{alert_rule_id}/recipients": {
+      "put": {
+        "operationId": "setAlertRuleRecipients",
+        "summary": "Set alert recipients",
+        "tags": ["Alerts"],
+        "security": [
+          {
+            "RivalikaApiKey": ["alerts:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "alert_rule_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "recipients": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "userId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "notifyEmail": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["userId", "notifyEmail"]
+                    }
+                  }
+                },
+                "required": ["recipients"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/reports/{report_id}": {
+      "patch": {
+        "operationId": "updateReport",
+        "summary": "Update a report definition",
+        "tags": ["Reports"],
+        "security": [
+          {
+            "RivalikaApiKey": ["reports:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "report_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "timezone": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "locale": {
+                    "type": "string"
+                  },
+                  "schedule": {
+                    "type": ["object", "null"],
+                    "properties": {},
+                    "additionalProperties": {}
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  },
+                  "configuration": {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteReport",
+        "summary": "Retire a report definition and retain its history",
+        "tags": ["Reports"],
+        "security": [
+          {
+            "RivalikaApiKey": ["reports:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "report_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "operationId": "getReport",
         "summary": "Get a report definition",
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "reports:read"
-            ]
+            "RivalikaApiKey": ["reports:read"]
           }
         ],
         "parameters": [
@@ -7427,17 +7401,96 @@
       }
     },
     "/api/v1/reports/{report_id}/runs": {
+      "get": {
+        "operationId": "listReportRuns",
+        "summary": "List report generation attempts",
+        "tags": ["Reports"],
+        "security": [
+          {
+            "RivalikaApiKey": ["reports:read"]
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "report_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "operationId": "createReportRun",
         "summary": "Start a report run",
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "reports:write"
-            ]
+            "RivalikaApiKey": ["reports:write"]
           }
         ],
         "parameters": [
@@ -7468,7 +7521,802 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AcceptedEnvelope"
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/supplier-offers": {
+      "get": {
+        "operationId": "listSupplierOffers",
+        "summary": "List supplier offers",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:read"]
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            },
+            "required": false,
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "required": false,
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "productId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "partnerId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "currency",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false,
+            "name": "preferred",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/supplier-offers/{offer_id}": {
+      "patch": {
+        "operationId": "updateSupplierOffer",
+        "summary": "Update a supplier offer",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "offer_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "partnerId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "supplierSku": {
+                    "type": ["string", "null"]
+                  },
+                  "costAmount": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "minOrderQuantity": {
+                    "type": ["integer", "null"],
+                    "exclusiveMinimum": 0
+                  },
+                  "leadTimeDays": {
+                    "type": ["integer", "null"],
+                    "minimum": 0
+                  },
+                  "validFrom": {
+                    "type": ["string", "null"],
+                    "format": "date"
+                  },
+                  "validTo": {
+                    "type": ["string", "null"],
+                    "format": "date"
+                  },
+                  "isPreferred": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteSupplierOffer",
+        "summary": "Remove a supplier offer",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "offer_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/price-books": {
+      "get": {
+        "operationId": "listPriceBooks",
+        "summary": "List price books",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/price-books/{price_book_id}": {
+      "patch": {
+        "operationId": "updatePriceBook",
+        "summary": "Update a price book",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "price_book_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/price-entries": {
+      "get": {
+        "operationId": "listPriceEntries",
+        "summary": "List price entries",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:read"]
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            },
+            "required": false,
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "required": false,
+            "name": "search",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "productId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": false,
+            "name": "priceBookId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing required scope",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or idempotency mismatch",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or concurrency limit exceeded",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commercial/price-entries/{price_entry_id}": {
+      "delete": {
+        "operationId": "deletePriceEntry",
+        "summary": "Remove a price entry",
+        "tags": ["Commercial Catalog"],
+        "security": [
+          {
+            "RivalikaApiKey": ["commercial_catalog:write"]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Unique key retained for 24 hours. Reusing a key with another payload returns 409.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "price_entry_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataEnvelope"
                 }
               }
             }
@@ -7530,14 +8378,10 @@
       "get": {
         "operationId": "downloadReportRun",
         "summary": "Download a completed report",
-        "tags": [
-          "Reports"
-        ],
+        "tags": ["Reports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "reports:read"
-            ]
+            "RivalikaApiKey": ["reports:read"]
           }
         ],
         "parameters": [
@@ -7619,14 +8463,10 @@
       "get": {
         "operationId": "listExports",
         "summary": "List exports",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:read"
-            ]
+            "RivalikaApiKey": ["exports:read"]
           }
         ],
         "parameters": [
@@ -7775,14 +8615,10 @@
       "post": {
         "operationId": "createExport",
         "summary": "Create an export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:write"
-            ]
+            "RivalikaApiKey": ["exports:write"]
           }
         ],
         "parameters": [
@@ -7805,6 +8641,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["integration_v1"],
+                    "description": "Lossless machine profile: ZIP with integration.csv (record_json column) and metadata.json. Exact decimal strings, stable IDs, UTC timestamps and publication provenance."
+                  },
                   "dataset": {
                     "type": "string"
                   },
@@ -7834,13 +8675,7 @@
                     "maxLength": 120
                   }
                 },
-                "required": [
-                  "dataset",
-                  "format",
-                  "locale",
-                  "timezone",
-                  "columns"
-                ]
+                "required": ["dataset", "format", "locale", "timezone", "columns"]
               }
             }
           }
@@ -7913,14 +8748,10 @@
       "post": {
         "operationId": "estimateExport",
         "summary": "Estimate an export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:read"
-            ]
+            "RivalikaApiKey": ["exports:read"]
           }
         ],
         "parameters": [
@@ -7943,6 +8774,11 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "profile": {
+                    "type": "string",
+                    "enum": ["integration_v1"],
+                    "description": "Lossless machine profile: ZIP with integration.csv (record_json column) and metadata.json. Exact decimal strings, stable IDs, UTC timestamps and publication provenance."
+                  },
                   "dataset": {
                     "type": "string"
                   },
@@ -7968,13 +8804,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "required": [
-                  "dataset",
-                  "format",
-                  "locale",
-                  "timezone",
-                  "columns"
-                ]
+                "required": ["dataset", "format", "locale", "timezone", "columns"]
               }
             }
           }
@@ -8047,14 +8877,10 @@
       "get": {
         "operationId": "getExport",
         "summary": "Get an export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:read"
-            ]
+            "RivalikaApiKey": ["exports:read"]
           }
         ],
         "parameters": [
@@ -8136,14 +8962,10 @@
       "post": {
         "operationId": "cancelExport",
         "summary": "Cancel an export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:write"
-            ]
+            "RivalikaApiKey": ["exports:write"]
           }
         ],
         "parameters": [
@@ -8236,14 +9058,10 @@
       "post": {
         "operationId": "retryExport",
         "summary": "Retry an export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:write"
-            ]
+            "RivalikaApiKey": ["exports:write"]
           }
         ],
         "parameters": [
@@ -8336,14 +9154,10 @@
       "get": {
         "operationId": "downloadExport",
         "summary": "Download a completed export",
-        "tags": [
-          "Exports"
-        ],
+        "tags": ["Exports"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "exports:read"
-            ]
+            "RivalikaApiKey": ["exports:read"]
           }
         ],
         "parameters": [
@@ -8425,14 +9239,10 @@
       "get": {
         "operationId": "listWebhookEndpoints",
         "summary": "List webhook endpoints",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:read"
-            ]
+            "RivalikaApiKey": ["webhooks:read"]
           }
         ],
         "responses": {
@@ -8501,14 +9311,10 @@
       "post": {
         "operationId": "createWebhookEndpoint",
         "summary": "Create a webhook endpoint",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:write"
-            ]
+            "RivalikaApiKey": ["webhooks:write"]
           }
         ],
         "parameters": [
@@ -8540,10 +9346,7 @@
                     "format": "uri"
                   },
                   "description": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   },
                   "subscriptions": {
                     "type": "array",
@@ -8597,25 +9400,15 @@
                           ]
                         },
                         "storeId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
+                          "type": ["string", "null"],
                           "format": "uuid"
                         }
                       },
-                      "required": [
-                        "eventType",
-                        "storeId"
-                      ]
+                      "required": ["eventType", "storeId"]
                     }
                   }
                 },
-                "required": [
-                  "name",
-                  "url",
-                  "subscriptions"
-                ]
+                "required": ["name", "url", "subscriptions"]
               }
             }
           }
@@ -8688,14 +9481,10 @@
       "get": {
         "operationId": "getWebhookEndpoint",
         "summary": "Get a webhook endpoint",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:read"
-            ]
+            "RivalikaApiKey": ["webhooks:read"]
           }
         ],
         "parameters": [
@@ -8775,14 +9564,10 @@
       "patch": {
         "operationId": "updateWebhookEndpoint",
         "summary": "Update a webhook endpoint",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:write"
-            ]
+            "RivalikaApiKey": ["webhooks:write"]
           }
         ],
         "parameters": [
@@ -8823,10 +9608,7 @@
                     "format": "uri"
                   },
                   "description": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
+                    "type": ["string", "null"]
                   },
                   "subscriptions": {
                     "type": "array",
@@ -8880,25 +9662,15 @@
                           ]
                         },
                         "storeId": {
-                          "type": [
-                            "string",
-                            "null"
-                          ],
+                          "type": ["string", "null"],
                           "format": "uuid"
                         }
                       },
-                      "required": [
-                        "eventType",
-                        "storeId"
-                      ]
+                      "required": ["eventType", "storeId"]
                     }
                   }
                 },
-                "required": [
-                  "name",
-                  "url",
-                  "subscriptions"
-                ]
+                "required": ["name", "url", "subscriptions"]
               }
             }
           }
@@ -8969,14 +9741,10 @@
       "delete": {
         "operationId": "deleteWebhookEndpoint",
         "summary": "Delete a webhook endpoint",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:write"
-            ]
+            "RivalikaApiKey": ["webhooks:write"]
           }
         ],
         "parameters": [
@@ -9069,14 +9837,10 @@
       "post": {
         "operationId": "rotateWebhookSigningSecret",
         "summary": "Rotate a webhook signing secret",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:write"
-            ]
+            "RivalikaApiKey": ["webhooks:write"]
           }
         ],
         "parameters": [
@@ -9169,14 +9933,10 @@
       "post": {
         "operationId": "testWebhookEndpoint",
         "summary": "Send a signed test event",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:write"
-            ]
+            "RivalikaApiKey": ["webhooks:write"]
           }
         ],
         "parameters": [
@@ -9269,14 +10029,10 @@
       "get": {
         "operationId": "listWebhookDeliveries",
         "summary": "List webhook deliveries",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:read"
-            ]
+            "RivalikaApiKey": ["webhooks:read"]
           }
         ],
         "parameters": [
@@ -9358,14 +10114,10 @@
       "get": {
         "operationId": "getWebhookDelivery",
         "summary": "Get a webhook delivery",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:read"
-            ]
+            "RivalikaApiKey": ["webhooks:read"]
           }
         ],
         "parameters": [
@@ -9447,14 +10199,10 @@
       "post": {
         "operationId": "replayWebhookDelivery",
         "summary": "Replay a webhook delivery",
-        "tags": [
-          "Webhooks"
-        ],
+        "tags": ["Webhooks"],
         "security": [
           {
-            "RivalikaApiKey": [
-              "webhooks:replay"
-            ]
+            "RivalikaApiKey": ["webhooks:replay"]
           }
         ],
         "parameters": [
@@ -9549,9 +10297,7 @@
       "post": {
         "operationId": "receiveRivalikaWebhook",
         "summary": "Receive a signed Rivalika webhook event",
-        "tags": [
-          "Webhook Receiver"
-        ],
+        "tags": ["Webhook Receiver"],
         "parameters": [
           {
             "schema": {
@@ -9647,13 +10393,7 @@
                     "additionalProperties": {}
                   }
                 },
-                "required": [
-                  "id",
-                  "type",
-                  "created_at",
-                  "organization_id",
-                  "data"
-                ]
+                "required": ["id", "type", "created_at", "organization_id", "data"]
               }
             }
           }

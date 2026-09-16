@@ -14,6 +14,7 @@ Name | Type
 `sheetName` | string
 `mapping` | { [key: string]: any; }
 `autoMatchEnabled` | boolean
+`validationImportIds` | Array&lt;string&gt;
 `dryRun` | boolean
 
 ## Example
@@ -31,6 +32,7 @@ const example = {
   "sheetName": null,
   "mapping": null,
   "autoMatchEnabled": null,
+  "validationImportIds": null,
   "dryRun": null,
 } satisfies CreateCommercialImportRequest
 

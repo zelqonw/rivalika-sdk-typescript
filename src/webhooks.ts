@@ -58,3 +58,15 @@ export function parseAndVerifyWebhook<T = unknown>(options: VerifyWebhookOptions
   verifyWebhookSignature(options)
   return JSON.parse(options.payload) as T
 }
+
+
+export function verifyWebhookEnvelope(options: VerifyWebhookOptions & {
+  organizationId: string; eventTypes: readonly string[]
+}): Record<string, unknown> {
+  const event = parseAndVerifyWebhook<Record<string, unknown>>(options)
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!event || event.api_version !== 'v1' || !uuid.test(String(event.id)) || !uuid.test(String(event.organization_id))) throw new WebhookVerificationError('Invalid webhook envelope identity or version')
+  if (event.id !== options.headers['webhook-id'] || event.organization_id !== options.organizationId) throw new WebhookVerificationError('Webhook organization or event identity mismatch')
+  if (!options.eventTypes.includes(String(event.type)) || !event.data || typeof event.data !== 'object' || Array.isArray(event.data)) throw new WebhookVerificationError('Unsupported webhook event')
+  return event
+}

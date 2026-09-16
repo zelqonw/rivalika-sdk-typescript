@@ -1,14 +1,17 @@
 # ReportsApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**createReport**](ReportsApi.md#createreportoperation) | **POST** /api/v1/reports | Create a report definition |
 | [**createReportRun**](ReportsApi.md#createreportrun) | **POST** /api/v1/reports/{report_id}/runs | Start a report run |
+| [**deleteReport**](ReportsApi.md#deletereport) | **DELETE** /api/v1/reports/{report_id} | Retire a report definition and retain its history |
 | [**downloadReportRun**](ReportsApi.md#downloadreportrun) | **GET** /api/v1/report-runs/{report_run_id}/download | Download a completed report |
 | [**getReport**](ReportsApi.md#getreport) | **GET** /api/v1/reports/{report_id} | Get a report definition |
+| [**listReportRuns**](ReportsApi.md#listreportruns) | **GET** /api/v1/reports/{report_id}/runs | List report generation attempts |
 | [**listReports**](ReportsApi.md#listreports) | **GET** /api/v1/reports | List report definitions |
+| [**updateReport**](ReportsApi.md#updatereportoperation) | **PATCH** /api/v1/reports/{report_id} | Update a report definition |
 
 
 
@@ -91,7 +94,7 @@ example().catch(console.error);
 
 ## createReportRun
 
-> AcceptedEnvelope createReportRun(idempotencyKey, reportId)
+> DataEnvelope createReportRun(idempotencyKey, reportId)
 
 Start a report run
 
@@ -141,7 +144,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**AcceptedEnvelope**](AcceptedEnvelope.md)
+[**DataEnvelope**](DataEnvelope.md)
 
 ### Authorization
 
@@ -157,6 +160,83 @@ example().catch(console.error);
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **202** | Accepted |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deleteReport
+
+> DataEnvelope deleteReport(idempotencyKey, reportId)
+
+Retire a report definition and retain its history
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { DeleteReportRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    reportId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies DeleteReportRequest;
+
+  try {
+    const data = await api.deleteReport(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **reportId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
 | **400** | Invalid request |  -  |
 | **401** | Invalid or expired API key |  -  |
 | **403** | Missing required scope |  -  |
@@ -314,6 +394,80 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listReportRuns
+
+> ListEnvelope listReportRuns(reportId)
+
+List report generation attempts
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { ListReportRunsRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  const body = {
+    // string
+    reportId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies ListReportRunsRequest;
+
+  try {
+    const data = await api.listReportRuns(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **reportId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## listReports
 
 > ListEnvelope listReports(page, size, search, status, type, isActive, scheduled)
@@ -390,6 +544,86 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateReport
+
+> DataEnvelope updateReport(idempotencyKey, reportId, updateReportRequest)
+
+Update a report definition
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { UpdateReportOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    reportId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // UpdateReportRequest
+    updateReportRequest: ...,
+  } satisfies UpdateReportOperationRequest;
+
+  try {
+    const data = await api.updateReport(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **reportId** | `string` |  | [Defaults to `undefined`] |
+| **updateReportRequest** | [UpdateReportRequest](UpdateReportRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`, `application/problem+json`
 
 

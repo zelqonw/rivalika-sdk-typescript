@@ -1,6 +1,6 @@
 {
   "name": "@rivalika/sdk",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Official TypeScript SDK for the Rivalika public API and signed webhooks",
   "author": "ZelqonWorks",
   "repository": {
@@ -12,8 +12,16 @@
   "types": "./dist/index.d.ts",
   "module": "./dist/esm/index.js",
   "sideEffects": false,
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "docs", "README.md", "LICENSE", "SECURITY.md"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc && tsc -p tsconfig.esm.json",
@@ -25,5 +33,8 @@
     "@types/node": "^24.0.0",
     "typescript": "^5.9.0",
     "vitest": "^4.0.0"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3"
   }
 }
