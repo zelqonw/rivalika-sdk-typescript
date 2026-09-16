@@ -1,6 +1,6 @@
 # PricingApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -10,7 +10,7 @@ All URIs are relative to *https://api.rivalika.com*
 
 ## getProductPriceHistory
 
-> DataEnvelope getProductPriceHistory(productId)
+> ListEnvelope getProductPriceHistory(productId)
 
 Get product price history
 
@@ -57,7 +57,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**DataEnvelope**](DataEnvelope.md)
+[**ListEnvelope**](ListEnvelope.md)
 
 ### Authorization
 

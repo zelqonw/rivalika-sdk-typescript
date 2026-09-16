@@ -25,6 +25,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - name: clean package install
+        run: |
+          npm pack --pack-destination /tmp
+          mkdir /tmp/rivalika-consumer
+          cd /tmp/rivalika-consumer
+          npm init -y
+          npm install /tmp/rivalika-sdk-*.tgz
+          node -e "const {IntegrationClient}=require('@rivalika/sdk'); if(typeof IntegrationClient!=='function')process.exit(1)"
+          node --input-type=module -e "import {IntegrationClient} from '@rivalika/sdk'; if(typeof IntegrationClient!=='function')process.exit(1)"
 
   drift:
     name: generation drift

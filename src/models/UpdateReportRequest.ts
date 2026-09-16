@@ -16,100 +16,98 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface CreateReportRequest
+ * @interface UpdateReportRequest
  */
-export interface CreateReportRequest {
+export interface UpdateReportRequest {
     /**
      * 
      * @type {string}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
      */
-    type: string;
+    timezone?: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
      */
-    name: string;
+    type?: string;
     /**
      * 
      * @type {string}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateReportRequest
      */
     locale?: string;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
      */
     schedule?: { [key: string]: any; };
     /**
      * 
      * @type {boolean}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
      */
     isActive?: boolean;
     /**
      * 
      * @type {{ [key: string]: any; }}
-     * @memberof CreateReportRequest
+     * @memberof UpdateReportRequest
      */
     _configuration?: { [key: string]: any; };
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateReportRequest
-     */
-    timezone?: string;
 }
 
 /**
- * Check if a given object implements the CreateReportRequest interface.
+ * Check if a given object implements the UpdateReportRequest interface.
  */
-export function instanceOfCreateReportRequest(value: object): value is CreateReportRequest {
-    if (!('type' in value) || value['type'] === undefined) return false;
-    if (!('name' in value) || value['name'] === undefined) return false;
+export function instanceOfUpdateReportRequest(value: object): value is UpdateReportRequest {
     return true;
 }
 
-export function CreateReportRequestFromJSON(json: any): CreateReportRequest {
-    return CreateReportRequestFromJSONTyped(json, false);
+export function UpdateReportRequestFromJSON(json: any): UpdateReportRequest {
+    return UpdateReportRequestFromJSONTyped(json, false);
 }
 
-export function CreateReportRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): CreateReportRequest {
+export function UpdateReportRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateReportRequest {
     if (json == null) {
         return json;
     }
     return {
         
-        'type': json['type'],
-        'name': json['name'],
+        'timezone': json['timezone'] == null ? undefined : json['timezone'],
+        'type': json['type'] == null ? undefined : json['type'],
+        'name': json['name'] == null ? undefined : json['name'],
         'locale': json['locale'] == null ? undefined : json['locale'],
         'schedule': json['schedule'] == null ? undefined : json['schedule'],
         'isActive': json['isActive'] == null ? undefined : json['isActive'],
         '_configuration': json['configuration'] == null ? undefined : json['configuration'],
-        'timezone': json['timezone'] == null ? undefined : json['timezone'],
     };
 }
 
-export function CreateReportRequestToJSON(json: any): CreateReportRequest {
-    return CreateReportRequestToJSONTyped(json, false);
+export function UpdateReportRequestToJSON(json: any): UpdateReportRequest {
+    return UpdateReportRequestToJSONTyped(json, false);
 }
 
-export function CreateReportRequestToJSONTyped(value?: CreateReportRequest | null, ignoreDiscriminator: boolean = false): any {
+export function UpdateReportRequestToJSONTyped(value?: UpdateReportRequest | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
 
     return {
         
+        'timezone': value['timezone'],
         'type': value['type'],
         'name': value['name'],
         'locale': value['locale'],
         'schedule': value['schedule'],
         'isActive': value['isActive'],
         'configuration': value['_configuration'],
-        'timezone': value['timezone'],
     };
 }
 

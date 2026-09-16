@@ -1,6 +1,6 @@
 # RepricingApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -18,6 +18,7 @@ All URIs are relative to *https://api.rivalika.com*
 | [**listRepricerRecommendations**](RepricingApi.md#listrepricerrecommendations) | **GET** /api/v1/repricer/recommendations | List repricer recommendations |
 | [**listRepricerRuns**](RepricingApi.md#listrepricerruns) | **GET** /api/v1/repricer/runs | List repricer runs |
 | [**rollbackRepricerApplication**](RepricingApi.md#rollbackrepricerapplication) | **POST** /api/v1/repricer/applications/{application_id}/rollback | Rollback a repricer application |
+| [**updateRepricerExclusion**](RepricingApi.md#updaterepricerexclusion) | **PATCH** /api/v1/repricer/exclusions/{exclusion_id} | Update a repricer exclusion |
 | [**updateRepricerPolicy**](RepricingApi.md#updaterepricerpolicy) | **PATCH** /api/v1/repricer/policies/{policy_id} | Update a repricer policy |
 | [**updateRepricerSettings**](RepricingApi.md#updaterepricersettingsoperation) | **PUT** /api/v1/repricer/settings | Update repricer settings |
 
@@ -943,7 +944,7 @@ async function example() {
     q: q_example,
     // string (optional)
     status: status_example,
-    // Array<string> (optional)
+    // Array<string> | Commercial product IDs, not shared market product IDs (optional)
     productIds: ...,
     // Array<string> (optional)
     policyIds: ...,
@@ -1000,7 +1001,7 @@ example().catch(console.error);
 | **size** | `number` |  | [Optional] [Defaults to `undefined`] |
 | **q** | `string` |  | [Optional] [Defaults to `undefined`] |
 | **status** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **productIds** | `Array<string>` |  | [Optional] |
+| **productIds** | `Array<string>` | Commercial product IDs, not shared market product IDs | [Optional] |
 | **policyIds** | `Array<string>` |  | [Optional] |
 | **priceBookIds** | `Array<string>` |  | [Optional] |
 | **currencies** | `Array<string>` |  | [Optional] |
@@ -1207,6 +1208,86 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateRepricerExclusion
+
+> DataEnvelope updateRepricerExclusion(idempotencyKey, exclusionId, createRepricerExclusionRequest)
+
+Update a repricer exclusion
+
+### Example
+
+```ts
+import {
+  Configuration,
+  RepricingApi,
+} from '@rivalika/sdk';
+import type { UpdateRepricerExclusionRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new RepricingApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    exclusionId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // CreateRepricerExclusionRequest
+    createRepricerExclusionRequest: ...,
+  } satisfies UpdateRepricerExclusionRequest;
+
+  try {
+    const data = await api.updateRepricerExclusion(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **exclusionId** | `string` |  | [Defaults to `undefined`] |
+| **createRepricerExclusionRequest** | [CreateRepricerExclusionRequest](CreateRepricerExclusionRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`, `application/problem+json`
 
 

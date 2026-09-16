@@ -1,6 +1,6 @@
 # AlertsApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -10,6 +10,7 @@ All URIs are relative to *https://api.rivalika.com*
 | [**getAlertSettings**](AlertsApi.md#getalertsettings) | **GET** /api/v1/alert-settings | Get alert settings |
 | [**listAlertEvents**](AlertsApi.md#listalertevents) | **GET** /api/v1/alert-events | List alert events |
 | [**listAlertRules**](AlertsApi.md#listalertrules) | **GET** /api/v1/alert-rules | List alert rules |
+| [**setAlertRuleRecipients**](AlertsApi.md#setalertrulerecipientsoperation) | **PUT** /api/v1/alert-rules/{alert_rule_id}/recipients | Set alert recipients |
 | [**updateAlertRule**](AlertsApi.md#updatealertruleoperation) | **PATCH** /api/v1/alert-rules/{alert_rule_id} | Update an alert rule |
 | [**updateAlertSettings**](AlertsApi.md#updatealertsettingsoperation) | **PUT** /api/v1/alert-settings | Update alert settings |
 
@@ -468,6 +469,86 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## setAlertRuleRecipients
+
+> DataEnvelope setAlertRuleRecipients(idempotencyKey, alertRuleId, setAlertRuleRecipientsRequest)
+
+Set alert recipients
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AlertsApi,
+} from '@rivalika/sdk';
+import type { SetAlertRuleRecipientsOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new AlertsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    alertRuleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // SetAlertRuleRecipientsRequest
+    setAlertRuleRecipientsRequest: ...,
+  } satisfies SetAlertRuleRecipientsOperationRequest;
+
+  try {
+    const data = await api.setAlertRuleRecipients(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **alertRuleId** | `string` |  | [Defaults to `undefined`] |
+| **setAlertRuleRecipientsRequest** | [SetAlertRuleRecipientsRequest](SetAlertRuleRecipientsRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`, `application/problem+json`
 
 

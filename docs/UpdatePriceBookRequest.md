@@ -1,30 +1,32 @@
 
-# ListEnvelopePage
+# UpdatePriceBookRequest
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`page` | number
-`size` | number
-`total` | number
-`hasMore` | boolean
-`nextCursor` | string
+`name` | string
+`description` | string
+`kind` | string
+`currency` | string
+`isDefault` | boolean
+`active` | boolean
 
 ## Example
 
 ```typescript
-import type { ListEnvelopePage } from '@rivalika/sdk'
+import type { UpdatePriceBookRequest } from '@rivalika/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
-  "page": null,
-  "size": null,
-  "total": null,
-  "hasMore": null,
-  "nextCursor": null,
-} satisfies ListEnvelopePage
+  "name": null,
+  "description": null,
+  "kind": null,
+  "currency": null,
+  "isDefault": null,
+  "active": null,
+} satisfies UpdatePriceBookRequest
 
 console.log(example)
 
@@ -33,7 +35,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as ListEnvelopePage
+const exampleParsed = JSON.parse(exampleJSON) as UpdatePriceBookRequest
 console.log(exampleParsed)
 ```
 

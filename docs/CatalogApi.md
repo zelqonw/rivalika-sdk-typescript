@@ -1,6 +1,6 @@
 # CatalogApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -153,7 +153,7 @@ This endpoint does not need any parameter.
 
 ## listProductListings
 
-> ListEnvelope listProductListings(productId)
+> DataEnvelope listProductListings(productId)
 
 List product store offers
 
@@ -200,7 +200,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**ListEnvelope**](ListEnvelope.md)
+[**DataEnvelope**](DataEnvelope.md)
 
 ### Authorization
 

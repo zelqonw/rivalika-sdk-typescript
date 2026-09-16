@@ -1,6 +1,6 @@
 # CommercialCatalogApi
 
-All URIs are relative to *https://api.rivalika.com*
+All URIs are relative to *https://api.rivalika.md*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
@@ -9,15 +9,22 @@ All URIs are relative to *https://api.rivalika.com*
 | [**createCommercialProduct**](CommercialCatalogApi.md#createcommercialproductoperation) | **POST** /api/v1/commercial/products | Create a commercial product |
 | [**deleteCommercialProduct**](CommercialCatalogApi.md#deletecommercialproductoperation) | **DELETE** /api/v1/commercial/products/{commercial_product_id} | Delete a commercial product |
 | [**deleteMarketLink**](CommercialCatalogApi.md#deletemarketlink) | **DELETE** /api/v1/commercial/products/{commercial_product_id}/market-link | Remove a market link |
+| [**deletePriceEntry**](CommercialCatalogApi.md#deletepriceentry) | **DELETE** /api/v1/commercial/price-entries/{price_entry_id} | Remove a price entry |
+| [**deleteSupplierOffer**](CommercialCatalogApi.md#deletesupplieroffer) | **DELETE** /api/v1/commercial/supplier-offers/{offer_id} | Remove a supplier offer |
 | [**getCommercialPartner**](CommercialCatalogApi.md#getcommercialpartner) | **GET** /api/v1/commercial/partners/{partner_id} | Get a commercial partner |
 | [**getCommercialProduct**](CommercialCatalogApi.md#getcommercialproduct) | **GET** /api/v1/commercial/products/{commercial_product_id} | Get a commercial product |
 | [**getMarketLink**](CommercialCatalogApi.md#getmarketlink) | **GET** /api/v1/commercial/products/{commercial_product_id}/market-link | Get a market link |
 | [**listCommercialPartners**](CommercialCatalogApi.md#listcommercialpartners) | **GET** /api/v1/commercial/partners | List commercial partners |
 | [**listCommercialProducts**](CommercialCatalogApi.md#listcommercialproducts) | **GET** /api/v1/commercial/products | List commercial products |
+| [**listPriceBooks**](CommercialCatalogApi.md#listpricebooks) | **GET** /api/v1/commercial/price-books | List price books |
+| [**listPriceEntries**](CommercialCatalogApi.md#listpriceentries) | **GET** /api/v1/commercial/price-entries | List price entries |
+| [**listSupplierOffers**](CommercialCatalogApi.md#listsupplieroffers) | **GET** /api/v1/commercial/supplier-offers | List supplier offers |
 | [**restoreCommercialProduct**](CommercialCatalogApi.md#restorecommercialproduct) | **POST** /api/v1/commercial/products/{productId}/restore | Restore a commercial product |
 | [**setMarketLink**](CommercialCatalogApi.md#setmarketlinkoperation) | **PUT** /api/v1/commercial/products/{commercial_product_id}/market-link | Set a market link |
 | [**updateCommercialPartner**](CommercialCatalogApi.md#updatecommercialpartneroperation) | **PATCH** /api/v1/commercial/partners/{partner_id} | Update a commercial partner |
 | [**updateCommercialProduct**](CommercialCatalogApi.md#updatecommercialproductoperation) | **PATCH** /api/v1/commercial/products/{commercial_product_id} | Update a commercial product |
+| [**updatePriceBook**](CommercialCatalogApi.md#updatepricebookoperation) | **PATCH** /api/v1/commercial/price-books/{price_book_id} | Update a price book |
+| [**updateSupplierOffer**](CommercialCatalogApi.md#updatesupplierofferoperation) | **PATCH** /api/v1/commercial/supplier-offers/{offer_id} | Update a supplier offer |
 
 
 
@@ -382,6 +389,160 @@ example().catch(console.error);
 |------------- | ------------- | ------------- | -------------|
 | **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
 | **commercialProductId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deletePriceEntry
+
+> DataEnvelope deletePriceEntry(idempotencyKey, priceEntryId)
+
+Remove a price entry
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { DeletePriceEntryRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    priceEntryId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies DeletePriceEntryRequest;
+
+  try {
+    const data = await api.deletePriceEntry(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **priceEntryId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deleteSupplierOffer
+
+> DataEnvelope deleteSupplierOffer(idempotencyKey, offerId)
+
+Remove a supplier offer
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { DeleteSupplierOfferRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    offerId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies DeleteSupplierOfferRequest;
+
+  try {
+    const data = await api.deleteSupplierOffer(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **offerId** | `string` |  | [Defaults to `undefined`] |
 
 ### Return type
 
@@ -843,6 +1004,250 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listPriceBooks
+
+> ListEnvelope listPriceBooks()
+
+List price books
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { ListPriceBooksRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  try {
+    const data = await api.listPriceBooks();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listPriceEntries
+
+> ListEnvelope listPriceEntries(page, size, search, productId, priceBookId)
+
+List price entries
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { ListPriceEntriesRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // number (optional)
+    page: 56,
+    // number (optional)
+    size: 56,
+    // string (optional)
+    search: search_example,
+    // string (optional)
+    productId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // string (optional)
+    priceBookId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies ListPriceEntriesRequest;
+
+  try {
+    const data = await api.listPriceEntries(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **page** | `number` |  | [Optional] [Defaults to `undefined`] |
+| **size** | `number` |  | [Optional] [Defaults to `undefined`] |
+| **search** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **productId** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **priceBookId** | `string` |  | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listSupplierOffers
+
+> ListEnvelope listSupplierOffers(page, size, search, productId, partnerId, currency, preferred)
+
+List supplier offers
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { ListSupplierOffersRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // number (optional)
+    page: 56,
+    // number (optional)
+    size: 56,
+    // string (optional)
+    search: search_example,
+    // string (optional)
+    productId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // string (optional)
+    partnerId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // string (optional)
+    currency: currency_example,
+    // boolean (optional)
+    preferred: true,
+  } satisfies ListSupplierOffersRequest;
+
+  try {
+    const data = await api.listSupplierOffers(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **page** | `number` |  | [Optional] [Defaults to `undefined`] |
+| **size** | `number` |  | [Optional] [Defaults to `undefined`] |
+| **search** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **productId** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **partnerId** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **currency** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **preferred** | `boolean` |  | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## restoreCommercialProduct
 
 > CommercialProductLifecycleEnvelope restoreCommercialProduct(idempotencyKey, productId)
@@ -1133,6 +1538,166 @@ example().catch(console.error);
 | **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
 | **commercialProductId** | `string` |  | [Defaults to `undefined`] |
 | **updateCommercialProductRequest** | [UpdateCommercialProductRequest](UpdateCommercialProductRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updatePriceBook
+
+> DataEnvelope updatePriceBook(idempotencyKey, priceBookId, updatePriceBookRequest)
+
+Update a price book
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { UpdatePriceBookOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    priceBookId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // UpdatePriceBookRequest
+    updatePriceBookRequest: ...,
+  } satisfies UpdatePriceBookOperationRequest;
+
+  try {
+    const data = await api.updatePriceBook(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **priceBookId** | `string` |  | [Defaults to `undefined`] |
+| **updatePriceBookRequest** | [UpdatePriceBookRequest](UpdatePriceBookRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateSupplierOffer
+
+> DataEnvelope updateSupplierOffer(idempotencyKey, offerId, updateSupplierOfferRequest)
+
+Update a supplier offer
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommercialCatalogApi,
+} from '@rivalika/sdk';
+import type { UpdateSupplierOfferOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new CommercialCatalogApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    offerId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // UpdateSupplierOfferRequest
+    updateSupplierOfferRequest: ...,
+  } satisfies UpdateSupplierOfferOperationRequest;
+
+  try {
+    const data = await api.updateSupplierOffer(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **offerId** | `string` |  | [Defaults to `undefined`] |
+| **updateSupplierOfferRequest** | [UpdateSupplierOfferRequest](UpdateSupplierOfferRequest.md) |  | |
 
 ### Return type
 

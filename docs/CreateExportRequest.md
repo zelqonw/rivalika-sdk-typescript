@@ -6,6 +6,7 @@
 
 Name | Type
 ------------ | -------------
+`profile` | string
 `dataset` | string
 `format` | string
 `locale` | string
@@ -21,6 +22,7 @@ import type { CreateExportRequest } from '@rivalika/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
+  "profile": null,
   "dataset": null,
   "format": null,
   "locale": null,
