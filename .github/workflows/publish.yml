@@ -20,8 +20,8 @@ jobs:
     environment: npm
     permissions:
       contents: read
-      # Trusted publishing: npm mints a short-lived credential from this
-      # token. There is no NPM_TOKEN to leak or rotate.
+      # Trusted publishing uses this after the one-time bootstrap token has
+      # created the package and the npm publisher relationship is configured.
       id-token: write
     steps:
       - uses: actions/checkout@v6
@@ -46,3 +46,8 @@ jobs:
             exit 1
           fi
       - run: npm publish --tag beta
+        env:
+          # npm cannot use trusted publishing until the package exists. Keep
+          # this token only for the first publication, then remove it once the
+          # package's trusted publisher has been configured on npmjs.com.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
