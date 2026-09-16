@@ -64,3 +64,9 @@ it('renews an expired upload and carries dry-run dependencies without storage cr
   expect(writes[0].validationImportIds).toEqual([organizationId])
   expect(progress).toHaveLength(3)
 })
+
+it('generated import request retains dry-run validation dependencies', async () => {
+  const { CreateCommercialImportRequestFromJSON, CreateCommercialImportRequestToJSON } = await import('../src/models/CreateCommercialImportRequest')
+  const request = { kind: 'supplier_offers', fileName: 'offers.csv', storageKey: 'imports/test', contentSha256: 'a'.repeat(64), sizeBytes: 100, dryRun: true, validationImportIds: [organizationId] }
+  expect(CreateCommercialImportRequestToJSON(CreateCommercialImportRequestFromJSON(request))).toMatchObject(request)
+})

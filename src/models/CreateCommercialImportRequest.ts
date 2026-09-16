@@ -69,6 +69,12 @@ export interface CreateCommercialImportRequest {
     autoMatchEnabled?: CreateCommercialImportRequestAutoMatchEnabledEnum;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof CreateCommercialImportRequest
+     */
+    validationImportIds?: Array<string>;
+    /**
+     * 
      * @type {boolean}
      * @memberof CreateCommercialImportRequest
      */
@@ -115,6 +121,7 @@ export function CreateCommercialImportRequestFromJSONTyped(json: any, ignoreDisc
         'sheetName': json['sheetName'] == null ? undefined : json['sheetName'],
         'mapping': json['mapping'] == null ? undefined : json['mapping'],
         'autoMatchEnabled': json['autoMatchEnabled'] == null ? undefined : json['autoMatchEnabled'],
+        'validationImportIds': json['validationImportIds'] == null ? undefined : json['validationImportIds'],
         'dryRun': json['dryRun'] == null ? undefined : json['dryRun'],
     };
 }
@@ -138,6 +145,7 @@ export function CreateCommercialImportRequestToJSONTyped(value?: CreateCommercia
         'sheetName': value['sheetName'],
         'mapping': value['mapping'],
         'autoMatchEnabled': value['autoMatchEnabled'],
+        'validationImportIds': value['validationImportIds'],
         'dryRun': value['dryRun'],
     };
 }
