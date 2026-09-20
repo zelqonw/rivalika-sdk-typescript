@@ -126,6 +126,8 @@ export function notifications(config, eventName, event, context = {}) {
   else if (run.conclusion === 'success') {
     if (outcomes.some((x) => ['applied', 'published'].includes(x.outcome)))
       messages.push(make('cicd', `${run.name} completed`, lines, identity, run.html_url))
+    else if (outcomes.some((x) => x.outcome === 'not-applied'))
+      messages.push(make('cicd', `${run.name}: not applied`, lines, identity, run.html_url))
     else if (
       (kind === 'delivery' &&
         (run.name !== 'CI' || context.deliveryExpected) &&

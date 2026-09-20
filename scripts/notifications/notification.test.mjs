@@ -84,12 +84,14 @@ test('draft, unsupported events and unmarked issues stay quiet; metadata exclude
 })
 test('applied, superseded, failure and unknown publication evidence remain distinct', () => {
   const delivery = { ...event, workflow_run: { ...run, name: 'CI', conclusion: 'success' } }
-  assert.equal(
-    notifications(config, 'workflow_run', delivery, {
-      outcomes: [{ kind: 'deploy', outcome: 'not-applied' }],
-    }).length,
-    0,
-  )
+  const superseded = notifications(config, 'workflow_run', delivery, {
+    outcomes: [{ kind: 'deploy', outcome: 'not-applied', stage: 'superseded' }],
+  })
+  assert.equal(superseded.length, 1)
+  assert.match(superseded[0].body.embeds[0].title, /not applied/)
+  assert.match(superseded[0].body.embeds[0].description, /superseded/)
+  assert.doesNotMatch(superseded[0].body.embeds[0].title, /completed|success/)
+
   assert.equal(
     notifications(config, 'workflow_run', delivery, {
       outcomes: [{ kind: 'deploy', outcome: 'applied', environment: 'dev' }],
