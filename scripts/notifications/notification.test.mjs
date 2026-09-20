@@ -298,3 +298,107 @@ test('outcome kind cannot falsely claim a different operation succeeded', () => 
     ),
   )
 })
+test('metadata messages include their sending run identity', () => {
+  const event = {
+    repository: { full_name: config.repository },
+    action: 'opened',
+    pull_request: {
+      number: 7,
+      title: 'Review',
+      state: 'open',
+      draft: false,
+      user: { login: 'author' },
+      html_url: `https://github.com/${config.repository}/pull/7`,
+    },
+  }
+  const messages = notifications(config, 'pull_request_target', event, {
+    notificationIdentity: 'run 123 · attempt 2',
+  })
+  assert.match(messages[0].body.embeds[0].footer.text, /run 123 · attempt 2/)
+})
+
+// Exercise API orchestration too: every HTTP request is replaced before the
+// sender is imported, and unknown requests fail closed instead of using a network.
+async function runCli(t, stale) {
+  const { mkdtemp, writeFile, readFile, copyFile, rm } = await import('node:fs/promises')
+  const { tmpdir } = await import('node:os')
+  const { join } = await import('node:path')
+  const { execFile } = await import('node:child_process')
+  const { promisify } = await import('node:util')
+  const dir = await mkdtemp(join(tmpdir(), 'notification-cli-'))
+  t.after(() => rm(dir, { recursive: true, force: true }))
+  for (const file of ['notify.mjs', 'notification-policy.mjs', 'discord-delivery.mjs'])
+    await copyFile(new URL(file, import.meta.url), join(dir, file))
+  await writeFile(
+    join(dir, 'config.json'),
+    JSON.stringify({ ...config, secrets: { cicd: 'TEST_WEBHOOK' } }),
+  )
+  const workflowRun = {
+    ...run,
+    event: 'pull_request',
+    conclusion: 'success',
+    workflow_id: 5,
+    run_number: 20,
+    run_attempt: 3,
+    head_branch: 'feature',
+    head_repository: { full_name: 'contributor/fork' },
+    pull_requests: [{ number: 7 }],
+  }
+  await writeFile(join(dir, 'event.json'), JSON.stringify({ ...event, workflow_run: workflowRun }))
+  await writeFile(
+    join(dir, 'mock.mjs'),
+    `
+    import { appendFileSync } from 'node:fs';
+    globalThis.fetch = async (input, options) => {
+      const url = new URL(input);
+      if (url.hostname === 'discord.com') {
+        appendFileSync(process.env.CAPTURE, options.body + '\\n');
+        return new Response('{}', {status: 200});
+      }
+      let value;
+      if (url.pathname.endsWith('/pulls/7')) value = {state:'open', head:{sha:${JSON.stringify(stale ? 'newer' : 'abc')}}};
+      else if (url.pathname.endsWith('/attempts/3/jobs')) value = {jobs:[]};
+      else if (url.pathname.endsWith('/workflows/5/runs')) value = {workflow_runs:[]};
+      else if (url.pathname.endsWith('/attempts/2')) value = {conclusion:'cancelled'};
+      else if (url.pathname.endsWith('/attempts/1')) value = {conclusion:'failure'};
+      else throw new Error('Unexpected offline request');
+      return new Response(JSON.stringify(value), {status:200});
+    };
+  `,
+  )
+  await promisify(execFile)(
+    process.execPath,
+    ['--import', join(dir, 'mock.mjs'), join(dir, 'notify.mjs')],
+    {
+      env: {
+        ...process.env,
+        GITHUB_REPOSITORY: config.repository,
+        GITHUB_EVENT_PATH: join(dir, 'event.json'),
+        GITHUB_EVENT_NAME: 'workflow_run',
+        GITHUB_RUN_ID: '99',
+        GITHUB_RUN_ATTEMPT: '1',
+        GH_TOKEN: 'offline',
+        TEST_WEBHOOK: 'https://discord.com/api/webhooks/1/offline',
+        CAPTURE: join(dir, 'messages'),
+      },
+    },
+  )
+  const raw = await readFile(join(dir, 'messages'), 'utf8').catch((error) => {
+    if (error.code === 'ENOENT') return ''
+    throw error
+  })
+  return raw
+    .trim()
+    .split('\n')
+    .filter(Boolean)
+    .map((line) => JSON.parse(line))
+}
+test('CLI suppresses a completed check after the PR head changes', async (t) => {
+  assert.deepEqual(await runCli(t, true), [])
+})
+test('CLI reports recovery after a cancelled rerun between failure and success', async (t) => {
+  const messages = await runCli(t, false)
+  assert.equal(messages.length, 1)
+  assert.match(messages[0].embeds[0].title, /recovered/)
+  assert.match(messages[0].embeds[0].footer.text, /run 42 · attempt 3/)
+})

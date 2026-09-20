@@ -72,7 +72,7 @@ export function notifications(config, eventName, event, context = {}) {
           ...(event.requested_reviewer ? [`Reviewer: ${event.requested_reviewer.login}`] : []),
           ...(event.requested_team ? [`Team: ${event.requested_team.name}`] : []),
         ],
-        `PR #${pr.number} · ${event.action}`,
+        `PR #${pr.number} · ${event.action}${context.notificationIdentity ? ` · ${context.notificationIdentity}` : ''}`,
         pr.html_url,
       ),
     ]
@@ -92,7 +92,7 @@ export function notifications(config, eventName, event, context = {}) {
         'git',
         `Issue ${event.action}: ${issue.title}`,
         [config.repository],
-        `Issue #${issue.number}`,
+        `Issue #${issue.number}${context.notificationIdentity ? ` · ${context.notificationIdentity}` : ''}`,
         issue.html_url,
       ),
     ]

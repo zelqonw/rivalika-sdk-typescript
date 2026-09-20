@@ -7,7 +7,9 @@ import { deliver } from './discord-delivery.mjs'
 const config = JSON.parse(readFileSync(new URL('./config.json', import.meta.url)))
 const env = process.env
 const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, 'utf8'))
-const context = {}
+const context = {
+  notificationIdentity: `run ${env.GITHUB_RUN_ID} · attempt ${env.GITHUB_RUN_ATTEMPT}`,
+}
 async function api(path) {
   const response = await fetch(`https://api.github.com/repos/${config.repository}/${path}`, {
     headers: {
@@ -40,15 +42,15 @@ async function main() {
   if (env.GITHUB_EVENT_NAME === 'workflow_run') {
     if (!config.workflows[run?.name]) return
     // Fork metadata is read only; no fork code, caches or artifacts are used.
-    const prs = run.pull_requests || []
+    let prs = run.pull_requests || []
     for (const item of prs) {
       const pr = await api(`pulls/${item.number}`)
       if (pr.head.sha !== run.head_sha || pr.state !== 'open') context.stale = true
     }
     if (run.event === 'pull_request' && !prs.length) {
       const associated = await api(`commits/${run.head_sha}/pulls`)
-      if (!associated.some((pr) => pr.state === 'open' && pr.head.sha === run.head_sha))
-        context.stale = true
+      prs = associated.filter((pr) => pr.state === 'open' && pr.head.sha === run.head_sha)
+      if (!prs.length) context.stale = true
     }
     if (context.stale) return
     const jobs = await pages(`actions/runs/${run.id}/attempts/${run.run_attempt}/jobs`, 'jobs')
@@ -78,8 +80,13 @@ async function main() {
           sameScope(r),
       )
       .sort((a, b) => b.run_number - a.run_number)[0]
-    if (run.run_attempt > 1)
-      previous = await api(`actions/runs/${run.id}/attempts/${run.run_attempt - 1}`)
+    for (let attempt = run.run_attempt - 1; attempt > 0; attempt--) {
+      const candidate = await api(`actions/runs/${run.id}/attempts/${attempt}`)
+      if (!['cancelled', 'skipped', 'neutral'].includes(candidate.conclusion)) {
+        previous = candidate
+        break
+      }
+    }
     context.previousConclusion = previous?.conclusion
     context.outcomes = []
     const trusted = trustedOutcomeRun(config, event)
