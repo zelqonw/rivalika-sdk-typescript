@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatorRevision": "057bf059a30d43461d87a5051acbf74f4e89777f58abe89299ca27ccea8ef15f",
+  "generatorRevision": "d565c1541099cf7a785d3a84aa842a37e8f2d42d54773832433a440afffbeb8e",
   "files": {
     "scripts/notifications/check-generated.mjs": "2415c7597a09f0b2f6bc99a08f05c242040374f99cc5b47444bee25705f91988",
     "scripts/notifications/discord-delivery.mjs": "70d5016ce18b55b3216bdc126e06b869529d38ae11059e0b312f09b7f944a412",
