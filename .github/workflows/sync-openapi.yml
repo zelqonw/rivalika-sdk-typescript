@@ -28,6 +28,10 @@ env:
 
 jobs:
   regenerate:
+    outputs:
+      source: ${{ steps.request.outputs.sha }}
+      pr: ${{ steps.pull-request.outputs.pull-request-number }}
+      operation: ${{ steps.pull-request.outputs.pull-request-operation }}
     name: regenerate and open a pull request
     runs-on: ubuntu-latest
     permissions:
@@ -73,6 +77,7 @@ jobs:
             generate -c openapi-generator-config.json
 
       - name: open a pull request
+        id: pull-request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 (Node 24)
         with:
           branch: bot/openapi-${{ steps.request.outputs.short }}
@@ -89,3 +94,33 @@ jobs:
             version.
 
             A sync that changes nothing opens no pull request at all.
+
+  notification-outcome:
+    name: Record notification outcome
+    continue-on-error: true
+    if: always()
+    needs: [regenerate]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Write sanitized outcome
+        env:
+          NOTIFY_KIND: sync
+          NOTIFY_SOURCE: ${{ needs.regenerate.outputs.source }}
+          NOTIFY_PR: ${{ needs.regenerate.outputs.pr }}
+          NOTIFY_OUTCOME: ${{ needs.regenerate.result == 'failure' && 'failed' || needs.regenerate.outputs.operation == 'created' && 'review-ready' || needs.regenerate.outputs.operation == 'updated' && 'review-ready' || 'unchanged' }}
+          NOTIFY_STAGE: ${{ needs.regenerate.result == 'failure' && 'regenerate' || 'complete' }}
+        run: node scripts/notifications/write-outcome.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: notification-outcome-${{ github.run_attempt }}-sync
+          path: output/notifications/outcome.json
+          retention-days: 14

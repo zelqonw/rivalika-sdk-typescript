@@ -1,0 +1,17 @@
+{
+  "repository": "zelqonw/rivalika-sdk-typescript",
+  "workflows": {
+    "Verify": "verify",
+    "Publish": "publish",
+    "Sync OpenAPI": "sync"
+  },
+  "automation": false,
+  "issueLabel": "notify:discord",
+  "pullRequestActions": ["opened", "ready_for_review", "reopened", "review_requested"],
+  "issueActions": ["labeled", "reopened", "closed"],
+  "secrets": {
+    "git": "DISCORD_GIT_WEBHOOK_URL",
+    "cicd": "DISCORD_CICD_WEBHOOK_URL",
+    "automation": "DISCORD_AUTOMATION_WEBHOOK_URL"
+  }
+}
