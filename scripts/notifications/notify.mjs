@@ -10,7 +10,7 @@ const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, 'utf8'))
 const context = {
   notificationIdentity: `run ${env.GITHUB_RUN_ID} · attempt ${env.GITHUB_RUN_ATTEMPT}`,
 }
-async function api(path) {
+async function request(path) {
   const response = await fetch(`https://api.github.com/repos/${config.repository}/${path}`, {
     headers: {
       Authorization: `Bearer ${env.GH_TOKEN}`,
@@ -20,7 +20,13 @@ async function api(path) {
     signal: AbortSignal.timeout(15000),
   })
   if (!response.ok) throw new Error(`GitHub metadata request failed (${response.status})`)
-  return response.json()
+  return response
+}
+async function api(path) {
+  return (await request(path)).json()
+}
+async function apiBytes(path) {
+  return Buffer.from(await (await request(path)).arrayBuffer())
 }
 async function pages(path, key) {
   const all = []
@@ -99,11 +105,7 @@ async function main() {
         const directory = mkdtempSync(join(tmpdir(), 'notification-'))
         try {
           // Read exactly one data file; never extract an archive into the checkout.
-          const archive = execFileSync(
-            'gh',
-            ['api', `repos/${config.repository}/actions/artifacts/${artifact.id}/zip`],
-            { maxBuffer: 1048576, stdio: ['ignore', 'pipe', 'pipe'] },
-          )
+          const archive = await apiBytes(`actions/artifacts/${artifact.id}/zip`)
           const zip = join(directory, 'outcome.zip')
           writeFileSync(zip, archive)
           const raw = execFileSync('unzip', ['-p', zip, 'outcome.json'], {
