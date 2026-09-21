@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatorRevision": "9b8a07075b72188375f12dda8c3ab06bfebca92767e706ebe55ad382e07b109a",
+  "generatorRevision": "cd40cc05f19e625d9e057426e695525289bb470cf4f20bd43d34ad6ed50e9094",
   "files": {
     "scripts/notifications/check-generated.mjs": "2415c7597a09f0b2f6bc99a08f05c242040374f99cc5b47444bee25705f91988",
     "scripts/notifications/discord-delivery.mjs": "70d5016ce18b55b3216bdc126e06b869529d38ae11059e0b312f09b7f944a412",
@@ -8,8 +8,8 @@
     "scripts/notifications/notification.test.mjs": "b3334c87fe81a910be0a0c8fe035cbf2beb2ec266a4427f954153b62240bcd07",
     "scripts/notifications/notify.mjs": "03ec7052ae13b738974b012402eb92107b40d14cd02863139ea18f1dcf508e3a",
     "scripts/notifications/write-outcome.mjs": "788e6cceab9fd81572e1daebd174e12166d3ecd82be37ebf2577c5b183db465a",
-    "scripts/notifications/config.json": "b199303baa156429e22893ef5793d0f5f7ae724629bcc66482cd5d6b96b734ad",
-    ".github/workflows/discord-notify.yml": "b2b40e4d6c552453862afe31aa419e0a754823f8b2ae2a585e140a084f151da6",
-    ".github/workflows/discord-contract.yml": "41a4306d1dd343bc5fd26d4f4e0df3777b81bc7b645528c4d64f141064d401f1"
+    "scripts/notifications/config.json": "d2890b0d3bfb4246b86b6162bdfdc18252560baf262d5a916bfffd3c014366f7",
+    ".github/workflows/discord-notify.yml": "683ab220a2d348cd38adc1aaf71ec306c7e49563b7d21f30ec52334d888578b1",
+    ".github/workflows/discord-contract.yml": "fcfe3feed0abc20a5cca255d43dbee2cb5d403d0c949d3d214071d502c0dbd69"
   }
 }

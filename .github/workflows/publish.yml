@@ -16,7 +16,7 @@ permissions:
 jobs:
   publish:
     name: npm
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, rivalika, light]
     environment: npm
     permissions:
       contents: read
@@ -31,8 +31,9 @@ jobs:
           registry-url: https://registry.npmjs.org
       - name: npm must be new enough to publish with OIDC
         run: |
-          npm install -g npm@latest
-          npm --version
+          npm install --prefix "$RUNNER_TEMP/npm-cli" npm@latest
+          echo "$RUNNER_TEMP/npm-cli/node_modules/.bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/npm-cli/node_modules/.bin/npm" --version
       - run: npm ci
       - run: npm run check
       - name: the tag must match the manifest
@@ -57,7 +58,7 @@ jobs:
     continue-on-error: true
     if: always()
     needs: [publish]
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, rivalika, light]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
