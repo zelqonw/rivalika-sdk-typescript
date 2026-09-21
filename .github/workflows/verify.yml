@@ -16,7 +16,8 @@ concurrency:
 jobs:
   check:
     name: tests and package
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, rivalika, light]
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -27,17 +28,20 @@ jobs:
       - run: npm run check
       - name: clean package install
         run: |
-          npm pack --pack-destination /tmp
-          mkdir /tmp/rivalika-consumer
-          cd /tmp/rivalika-consumer
+          rm -f "$RUNNER_TEMP"/rivalika-sdk-*.tgz
+          rm -rf "$RUNNER_TEMP/rivalika-consumer"
+          npm pack --pack-destination "$RUNNER_TEMP"
+          mkdir "$RUNNER_TEMP/rivalika-consumer"
+          cd "$RUNNER_TEMP/rivalika-consumer"
           npm init -y
-          npm install /tmp/rivalika-sdk-*.tgz
+          npm install "$RUNNER_TEMP"/rivalika-sdk-*.tgz
           node -e "const {IntegrationClient}=require('@rivalika/sdk'); if(typeof IntegrationClient!=='function')process.exit(1)"
           node --input-type=module -e "import {IntegrationClient} from '@rivalika/sdk'; if(typeof IntegrationClient!=='function')process.exit(1)"
 
   drift:
     name: generation drift
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, rivalika, heavy]
     # The SDK is generated, not written. If the committed tree and a fresh
     # generation from the same spec disagree, someone hand-edited generated
     # code and the next sync would silently revert them.

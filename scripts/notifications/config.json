@@ -6,6 +6,7 @@
     "Sync OpenAPI": "sync"
   },
   "automation": false,
+  "runnerLabels": ["self-hosted", "rivalika", "light"],
   "issueLabel": "notify:discord",
   "pullRequestActions": ["opened", "ready_for_review", "reopened", "review_requested"],
   "issueActions": ["labeled", "reopened", "closed"],

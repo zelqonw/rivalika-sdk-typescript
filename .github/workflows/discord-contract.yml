@@ -1,4 +1,4 @@
-# Generated; offline and secret-free, including fork pull requests.
+# Generated; offline and secret-free. Fork PR code never runs on persistent runners.
 name: Notification contract
 on:
   push:
@@ -8,7 +8,8 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, rivalika, light]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1

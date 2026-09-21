@@ -33,7 +33,7 @@ jobs:
       pr: ${{ steps.pull-request.outputs.pull-request-number }}
       operation: ${{ steps.pull-request.outputs.pull-request-operation }}
     name: regenerate and open a pull request
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, rivalika, heavy]
     permissions:
       contents: write
       pull-requests: write
@@ -100,7 +100,7 @@ jobs:
     continue-on-error: true
     if: always()
     needs: [regenerate]
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, rivalika, light]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
