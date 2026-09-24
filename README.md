@@ -4,7 +4,7 @@ Official TypeScript client for Rivalika's `/api/v1` public API, generated from
 the committed OpenAPI 3.1 contract with OpenAPI Generator 7.22.0. The package
 also includes maintained helpers for verifying signed webhook deliveries.
 
-This source builds `@rivalika/sdk==1.0.0-beta.4` (beta). It includes structured import failure and row-error diagnostics from the current beta.3 API contract. Package versions are independent of the API contract version. Registry publication is performed by the tagged release workflow.
+This source builds `@rivalika/sdk==1.0.0-beta.5` (beta). It includes structured import failure and row-error diagnostics from the current beta.3 API contract. Package versions are independent of the API contract version. Registry publication is performed by the tagged release workflow.
 
 ## API client
 
