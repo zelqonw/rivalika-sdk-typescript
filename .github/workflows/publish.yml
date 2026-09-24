@@ -9,6 +9,12 @@ name: Publish
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing validated release tag to publish or retry
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -16,15 +22,26 @@ permissions:
 jobs:
   publish:
     name: npm
-    runs-on: [self-hosted, rivalika, light]
+    # Registry provenance requires a GitHub-hosted signing environment.
+    runs-on: ubuntu-latest
     environment: npm
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
     permissions:
       contents: read
       # Trusted publishing uses this after the one-time bootstrap token has
       # created the package and the npm publisher relationship is configured.
       id-token: write
     steps:
+      - name: Validate release reference
+        run: |
+          case "$RELEASE_TAG" in
+            v[0-9]*) ;;
+            *) echo "An existing version tag is required" >&2; exit 1 ;;
+          esac
       - uses: actions/checkout@v6
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
       - uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -40,10 +57,10 @@ jobs:
         # A tag that disagrees with package.json publishes a version nobody
         # asked for, under a name the tag does not describe.
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
+          TAG="${RELEASE_TAG#v}"
           MANIFEST="$(node -p "require('./package.json').version")"
           if [ "$TAG" != "$MANIFEST" ]; then
-            echo "tag ${GITHUB_REF_NAME} does not match package.json ${MANIFEST}" >&2
+            echo "tag ${RELEASE_TAG} does not match package.json ${MANIFEST}" >&2
             exit 1
           fi
       - run: npm publish --tag beta
@@ -72,7 +89,7 @@ jobs:
       - name: Write sanitized outcome
         env:
           NOTIFY_KIND: publish
-          NOTIFY_VERSION: ${{ github.ref_name }}
+          NOTIFY_VERSION: ${{ inputs.tag || github.ref_name }}
           NOTIFY_RELEASE: ${{ github.sha }}
           NOTIFY_OUTCOME: ${{ needs.publish.result == 'success' && 'published' || needs.publish.result == 'failure' && 'failed' || 'unknown' }}
           NOTIFY_STAGE: ${{ needs.publish.result == 'success' && 'complete' || 'package publication' }}
