@@ -31,7 +31,50 @@ export interface CommercialImportDetailEnvelopeDataRowErrorsInner {
      * @memberof CommercialImportDetailEnvelopeDataRowErrorsInner
      */
     message: string;
+    /**
+     * 
+     * @type {CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum}
+     * @memberof CommercialImportDetailEnvelopeDataRowErrorsInner
+     */
+    code: CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof CommercialImportDetailEnvelopeDataRowErrorsInner
+     */
+    params: { [key: string]: string; };
 }
+
+
+/**
+ * @export
+ */
+export const CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum = {
+    FieldRequired: 'field_required',
+    FieldNotInteger: 'field_not_integer',
+    FieldNotAmount: 'field_not_amount',
+    FieldNotBoolean: 'field_not_boolean',
+    FieldNotDate: 'field_not_date',
+    CurrencyUnsupported: 'currency_unsupported',
+    PriceBookKindInvalid: 'price_book_kind_invalid',
+    ProductNotFound: 'product_not_found',
+    ParentNotFound: 'parent_not_found',
+    PartnerNotFound: 'partner_not_found',
+    RolesInvalid: 'roles_invalid',
+    AttributesInvalidJson: 'attributes_invalid_json',
+    AttributesNotObject: 'attributes_not_object',
+    AttributesTooMany: 'attributes_too_many',
+    ValidFromAfterValidTo: 'valid_from_after_valid_to',
+    VariantCycle: 'variant_cycle',
+    SourceOwnedByOther: 'source_owned_by_other',
+    SourceIdentityOtherProduct: 'source_identity_other_product',
+    SourceIdentityIncomplete: 'source_identity_incomplete',
+    TaxBasisInvalid: 'tax_basis_invalid',
+    VatRateInvalid: 'vat_rate_invalid',
+    Unknown: 'unknown'
+} as const;
+export type CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum = typeof CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum[keyof typeof CommercialImportDetailEnvelopeDataRowErrorsInnerCodeEnum];
+
 
 /**
  * Check if a given object implements the CommercialImportDetailEnvelopeDataRowErrorsInner interface.
@@ -39,6 +82,8 @@ export interface CommercialImportDetailEnvelopeDataRowErrorsInner {
 export function instanceOfCommercialImportDetailEnvelopeDataRowErrorsInner(value: object): value is CommercialImportDetailEnvelopeDataRowErrorsInner {
     if (!('rowNumber' in value) || value['rowNumber'] === undefined) return false;
     if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('params' in value) || value['params'] === undefined) return false;
     return true;
 }
 
@@ -54,6 +99,8 @@ export function CommercialImportDetailEnvelopeDataRowErrorsInnerFromJSONTyped(js
         
         'rowNumber': json['row_number'],
         'message': json['message'],
+        'code': json['code'],
+        'params': json['params'],
     };
 }
 
@@ -70,6 +117,8 @@ export function CommercialImportDetailEnvelopeDataRowErrorsInnerToJSONTyped(valu
         
         'row_number': value['rowNumber'],
         'message': value['message'],
+        'code': value['code'],
+        'params': value['params'],
     };
 }
 

@@ -101,6 +101,18 @@ export interface CommercialImportDetailEnvelopeData {
     failureSummary: string | null;
     /**
      * 
+     * @type {CommercialImportDetailEnvelopeDataErrorCodeEnum}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    errorCode: CommercialImportDetailEnvelopeDataErrorCodeEnum | null;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    errorParams: { [key: string]: string; };
+    /**
+     * 
      * @type {Array<CommercialImportDetailEnvelopeDataRowErrorsInner>}
      * @memberof CommercialImportDetailEnvelopeData
      */
@@ -161,6 +173,35 @@ export const CommercialImportDetailEnvelopeDataStatusEnum = {
 } as const;
 export type CommercialImportDetailEnvelopeDataStatusEnum = typeof CommercialImportDetailEnvelopeDataStatusEnum[keyof typeof CommercialImportDetailEnvelopeDataStatusEnum];
 
+/**
+ * @export
+ */
+export const CommercialImportDetailEnvelopeDataErrorCodeEnum = {
+    FileTooLarge: 'file_too_large',
+    UnsupportedFileType: 'unsupported_file_type',
+    InvalidUtf8: 'invalid_utf8',
+    NullBytes: 'null_bytes',
+    XlsxArchiveInvalid: 'xlsx_archive_invalid',
+    XlsxExpansion: 'xlsx_expansion',
+    FormulasNotAllowed: 'formulas_not_allowed',
+    WorksheetUnavailable: 'worksheet_unavailable',
+    RowLimit: 'row_limit',
+    ColumnLimit: 'column_limit',
+    NoHeaders: 'no_headers',
+    DuplicateColumns: 'duplicate_columns',
+    UnsupportedColumns: 'unsupported_columns',
+    MissingRequiredColumns: 'missing_required_columns',
+    MappedSourceMissing: 'mapped_source_missing',
+    UnsupportedTargetColumn: 'unsupported_target_column',
+    SizeMismatch: 'size_mismatch',
+    ShaMismatch: 'sha_mismatch',
+    LegacyIdentityUnverified: 'legacy_identity_unverified',
+    StorageReferenceInvalid: 'storage_reference_invalid',
+    RuntimeUnavailable: 'runtime_unavailable',
+    Unknown: 'unknown'
+} as const;
+export type CommercialImportDetailEnvelopeDataErrorCodeEnum = typeof CommercialImportDetailEnvelopeDataErrorCodeEnum[keyof typeof CommercialImportDetailEnvelopeDataErrorCodeEnum];
+
 
 /**
  * Check if a given object implements the CommercialImportDetailEnvelopeData interface.
@@ -178,6 +219,8 @@ export function instanceOfCommercialImportDetailEnvelopeData(value: object): val
     if (!('lastProcessedRow' in value) || value['lastProcessedRow'] === undefined) return false;
     if (!('hasErrorReport' in value) || value['hasErrorReport'] === undefined) return false;
     if (!('failureSummary' in value) || value['failureSummary'] === undefined) return false;
+    if (!('errorCode' in value) || value['errorCode'] === undefined) return false;
+    if (!('errorParams' in value) || value['errorParams'] === undefined) return false;
     if (!('rowErrors' in value) || value['rowErrors'] === undefined) return false;
     if (!('rowErrorsTruncated' in value) || value['rowErrorsTruncated'] === undefined) return false;
     if (!('startedAt' in value) || value['startedAt'] === undefined) return false;
@@ -209,6 +252,8 @@ export function CommercialImportDetailEnvelopeDataFromJSONTyped(json: any, ignor
         'lastProcessedRow': json['last_processed_row'],
         'hasErrorReport': json['has_error_report'],
         'failureSummary': json['failure_summary'],
+        'errorCode': json['error_code'],
+        'errorParams': json['error_params'],
         'rowErrors': ((json['row_errors'] as Array<any>).map(CommercialImportDetailEnvelopeDataRowErrorsInnerFromJSON)),
         'rowErrorsTruncated': json['row_errors_truncated'],
         'startedAt': (json['started_at'] == null ? null : new Date(json['started_at'])),
@@ -241,6 +286,8 @@ export function CommercialImportDetailEnvelopeDataToJSONTyped(value?: Commercial
         'last_processed_row': value['lastProcessedRow'],
         'has_error_report': value['hasErrorReport'],
         'failure_summary': value['failureSummary'],
+        'error_code': value['errorCode'],
+        'error_params': value['errorParams'],
         'row_errors': ((value['rowErrors'] as Array<any>).map(CommercialImportDetailEnvelopeDataRowErrorsInnerToJSON)),
         'row_errors_truncated': value['rowErrorsTruncated'],
         'started_at': value['startedAt'] == null ? value['startedAt'] : value['startedAt'].toISOString(),

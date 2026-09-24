@@ -18,6 +18,8 @@ Name | Type
 `lastProcessedRow` | number
 `hasErrorReport` | boolean
 `failureSummary` | string
+`errorCode` | string
+`errorParams` | { [key: string]: string; }
 `rowErrors` | [Array&lt;CommercialImportDetailEnvelopeDataRowErrorsInner&gt;](CommercialImportDetailEnvelopeDataRowErrorsInner.md)
 `rowErrorsTruncated` | boolean
 `startedAt` | Date
@@ -44,6 +46,8 @@ const example = {
   "lastProcessedRow": null,
   "hasErrorReport": null,
   "failureSummary": null,
+  "errorCode": null,
+  "errorParams": null,
   "rowErrors": null,
   "rowErrorsTruncated": null,
   "startedAt": null,

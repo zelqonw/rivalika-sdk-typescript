@@ -8,6 +8,8 @@ Name | Type
 ------------ | -------------
 `rowNumber` | number
 `message` | string
+`code` | string
+`params` | { [key: string]: string; }
 
 ## Example
 
@@ -18,6 +20,8 @@ import type { CommercialImportDetailEnvelopeDataRowErrorsInner } from '@rivalika
 const example = {
   "rowNumber": null,
   "message": null,
+  "code": null,
+  "params": null,
 } satisfies CommercialImportDetailEnvelopeDataRowErrorsInner
 
 console.log(example)
