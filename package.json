@@ -1,6 +1,6 @@
 {
   "name": "@rivalika/sdk",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Official TypeScript SDK for the Rivalika public API and signed webhooks",
   "author": "ZelqonWorks",
   "repository": {

@@ -253,6 +253,40 @@
                 "type": ["string", "null"],
                 "maxLength": 160
               },
+              "error_code": {
+                "type": ["string", "null"],
+                "enum": [
+                  "file_too_large",
+                  "unsupported_file_type",
+                  "invalid_utf8",
+                  "null_bytes",
+                  "xlsx_archive_invalid",
+                  "xlsx_expansion",
+                  "formulas_not_allowed",
+                  "worksheet_unavailable",
+                  "row_limit",
+                  "column_limit",
+                  "no_headers",
+                  "duplicate_columns",
+                  "unsupported_columns",
+                  "missing_required_columns",
+                  "mapped_source_missing",
+                  "unsupported_target_column",
+                  "size_mismatch",
+                  "sha_mismatch",
+                  "legacy_identity_unverified",
+                  "storage_reference_invalid",
+                  "runtime_unavailable",
+                  "unknown",
+                  null
+                ]
+              },
+              "error_params": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
               "row_errors": {
                 "type": "array",
                 "items": {
@@ -265,9 +299,42 @@
                     "message": {
                       "type": "string",
                       "maxLength": 160
+                    },
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "field_required",
+                        "field_not_integer",
+                        "field_not_amount",
+                        "field_not_boolean",
+                        "field_not_date",
+                        "currency_unsupported",
+                        "price_book_kind_invalid",
+                        "product_not_found",
+                        "parent_not_found",
+                        "partner_not_found",
+                        "roles_invalid",
+                        "attributes_invalid_json",
+                        "attributes_not_object",
+                        "attributes_too_many",
+                        "valid_from_after_valid_to",
+                        "variant_cycle",
+                        "source_owned_by_other",
+                        "source_identity_other_product",
+                        "source_identity_incomplete",
+                        "tax_basis_invalid",
+                        "vat_rate_invalid",
+                        "unknown"
+                      ]
+                    },
+                    "params": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
                     }
                   },
-                  "required": ["row_number", "message"]
+                  "required": ["row_number", "message", "code", "params"]
                 },
                 "maxItems": 100
               },
@@ -304,6 +371,8 @@
               "last_processed_row",
               "has_error_report",
               "failure_summary",
+              "error_code",
+              "error_params",
               "row_errors",
               "row_errors_truncated",
               "started_at",
