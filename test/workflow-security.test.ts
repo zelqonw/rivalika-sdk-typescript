@@ -33,7 +33,7 @@ describe("workflow runner security", () => {
     expect(source).toContain("environment: npm");
     expect(source).toContain("id-token: write");
     expect(source).toContain("ref: refs/tags/");
-    expect(source).toContain("github.ref == 'refs/heads/main'");
+    expect(source).toContain("startsWith(github.ref, 'refs/tags/v')");
     expect(source).toContain('TAG="${RELEASE_TAG#v}"');
     expect(source).toContain('if [ "$TAG" != "$MANIFEST" ]');
   });
