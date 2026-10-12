@@ -29,6 +29,11 @@ import {
     ListEnvelopeToJSON,
 } from '../models/ListEnvelope';
 import {
+    type PreviewReportRequest,
+    PreviewReportRequestFromJSON,
+    PreviewReportRequestToJSON,
+} from '../models/PreviewReportRequest';
+import {
     type Problem,
     ProblemFromJSON,
     ProblemToJSON,
@@ -62,6 +67,11 @@ export interface GetReportRequest {
     reportId: string;
 }
 
+export interface GetReportRunRequest {
+    reportId: string;
+    reportRunId: string;
+}
+
 export interface ListReportRunsRequest {
     reportId: string;
 }
@@ -74,6 +84,10 @@ export interface ListReportsRequest {
     type?: string;
     isActive?: boolean | null;
     scheduled?: boolean | null;
+}
+
+export interface PreviewReportOperationRequest {
+    previewReportRequest: PreviewReportRequest;
 }
 
 export interface UpdateReportOperationRequest {
@@ -211,6 +225,31 @@ export interface ReportsApiInterface {
     getReport(requestParameters: GetReportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
 
     /**
+     * Creates request options for getReportRun without sending the request
+     * @param {string} reportId 
+     * @param {string} reportRunId 
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    getReportRunRequestOpts(requestParameters: GetReportRunRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Get a report run with its key figures and findings
+     * @param {string} reportId 
+     * @param {string} reportRunId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    getReportRunRaw(requestParameters: GetReportRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Get a report run with its key figures and findings
+     */
+    getReportRun(requestParameters: GetReportRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
      * Creates request options for listReportRuns without sending the request
      * @param {string} reportId 
      * @throws {RequiredError}
@@ -232,6 +271,27 @@ export interface ReportsApiInterface {
      * List report generation attempts
      */
     listReportRuns(requestParameters: ListReportRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope>;
+
+    /**
+     * Creates request options for listReportingTemplates without sending the request
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    listReportingTemplatesRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary List report and export templates with their readiness
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    listReportingTemplatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEnvelope>>;
+
+    /**
+     * List report and export templates with their readiness
+     */
+    listReportingTemplates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope>;
 
     /**
      * Creates request options for listReports without sending the request
@@ -267,6 +327,29 @@ export interface ReportsApiInterface {
      * List report definitions
      */
     listReports(requestParameters: ListReportsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope>;
+
+    /**
+     * Creates request options for previewReport without sending the request
+     * @param {PreviewReportRequest} previewReportRequest 
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    previewReportRequestOpts(requestParameters: PreviewReportOperationRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Preview what a report definition would cover
+     * @param {PreviewReportRequest} previewReportRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ReportsApiInterface
+     */
+    previewReportRaw(requestParameters: PreviewReportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Preview what a report definition would cover
+     */
+    previewReport(requestParameters: PreviewReportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
 
     /**
      * Creates request options for updateReport without sending the request
@@ -603,6 +686,67 @@ export class ReportsApi extends runtime.BaseAPI implements ReportsApiInterface {
     }
 
     /**
+     * Creates request options for getReportRun without sending the request
+     */
+    async getReportRunRequestOpts(requestParameters: GetReportRunRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['reportId'] == null) {
+            throw new runtime.RequiredError(
+                'reportId',
+                'Required parameter "reportId" was null or undefined when calling getReportRun().'
+            );
+        }
+
+        if (requestParameters['reportRunId'] == null) {
+            throw new runtime.RequiredError(
+                'reportRunId',
+                'Required parameter "reportRunId" was null or undefined when calling getReportRun().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["reports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/reports/{report_id}/runs/{report_run_id}`;
+        urlPath = urlPath.replace('{report_id}', encodeURIComponent(String(requestParameters['reportId'])));
+        urlPath = urlPath.replace('{report_run_id}', encodeURIComponent(String(requestParameters['reportRunId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get a report run with its key figures and findings
+     */
+    async getReportRunRaw(requestParameters: GetReportRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.getReportRunRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a report run with its key figures and findings
+     */
+    async getReportRun(requestParameters: GetReportRunRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.getReportRunRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for listReportRuns without sending the request
      */
     async listReportRunsRequestOpts(requestParameters: ListReportRunsRequest): Promise<runtime.RequestOpts> {
@@ -652,6 +796,51 @@ export class ReportsApi extends runtime.BaseAPI implements ReportsApiInterface {
      */
     async listReportRuns(requestParameters: ListReportRunsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope> {
         const response = await this.listReportRunsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listReportingTemplates without sending the request
+     */
+    async listReportingTemplatesRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["reports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/report-templates`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * List report and export templates with their readiness
+     */
+    async listReportingTemplatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEnvelope>> {
+        const requestOptions = await this.listReportingTemplatesRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * List report and export templates with their readiness
+     */
+    async listReportingTemplates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope> {
+        const response = await this.listReportingTemplatesRaw(initOverrides);
         return await response.value();
     }
 
@@ -725,6 +914,61 @@ export class ReportsApi extends runtime.BaseAPI implements ReportsApiInterface {
      */
     async listReports(requestParameters: ListReportsRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope> {
         const response = await this.listReportsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for previewReport without sending the request
+     */
+    async previewReportRequestOpts(requestParameters: PreviewReportOperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['previewReportRequest'] == null) {
+            throw new runtime.RequiredError(
+                'previewReportRequest',
+                'Required parameter "previewReportRequest" was null or undefined when calling previewReport().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["reports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/reports/preview`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PreviewReportRequestToJSON(requestParameters['previewReportRequest']),
+        };
+    }
+
+    /**
+     * Preview what a report definition would cover
+     */
+    async previewReportRaw(requestParameters: PreviewReportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.previewReportRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Preview what a report definition would cover
+     */
+    async previewReport(requestParameters: PreviewReportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.previewReportRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

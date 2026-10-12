@@ -227,7 +227,7 @@ example().catch(console.error);
 
 ## listProducts
 
-> ListEnvelope listProducts(page, size, search, storeIds, categoryIds, brandIds, changeType, timeRange, discounted, includeOffers, locale)
+> ListEnvelope listProducts(page, size, search, storeIds, categoryIds, brandIds, changeType, timeRange, discounted, discountCheck, includeOffers, locale, specFilters)
 
 List published products
 
@@ -267,10 +267,14 @@ async function example() {
     timeRange: timeRange_example,
     // boolean (optional)
     discounted: true,
+    // 'real' | 'inflated' | 'insufficientHistory' | Products with a current offer whose advertised previous price was checked against the lowest price that store charged in the 30 days before the discount: real, inflated (above that low) or insufficientHistory. (optional)
+    discountCheck: discountCheck_example,
     // boolean (optional)
     includeOffers: true,
     // string (optional)
     locale: locale_example,
+    // string | JSON array of characteristic filters on the typed attributes of the one category in categoryIds, e.g. [{\"key\":\"ram_gb\",\"min\":16},{\"key\":\"panel_type\",\"values\":[\"ips\"]},{\"key\":\"smart_tv\",\"boolean\":true}]. (optional)
+    specFilters: specFilters_example,
   } satisfies ListProductsRequest;
 
   try {
@@ -299,8 +303,10 @@ example().catch(console.error);
 | **changeType** | `string` |  | [Optional] [Defaults to `undefined`] |
 | **timeRange** | `string` |  | [Optional] [Defaults to `undefined`] |
 | **discounted** | `boolean` |  | [Optional] [Defaults to `undefined`] |
+| **discountCheck** | `real`, `inflated`, `insufficientHistory` | Products with a current offer whose advertised previous price was checked against the lowest price that store charged in the 30 days before the discount: real, inflated (above that low) or insufficientHistory. | [Optional] [Defaults to `undefined`] [Enum: real, inflated, insufficientHistory] |
 | **includeOffers** | `boolean` |  | [Optional] [Defaults to `undefined`] |
 | **locale** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **specFilters** | `string` | JSON array of characteristic filters on the typed attributes of the one category in categoryIds, e.g. [{\&quot;key\&quot;:\&quot;ram_gb\&quot;,\&quot;min\&quot;:16},{\&quot;key\&quot;:\&quot;panel_type\&quot;,\&quot;values\&quot;:[\&quot;ips\&quot;]},{\&quot;key\&quot;:\&quot;smart_tv\&quot;,\&quot;boolean\&quot;:true}]. | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 

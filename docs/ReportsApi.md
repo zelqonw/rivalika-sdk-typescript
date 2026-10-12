@@ -9,8 +9,11 @@ All URIs are relative to *https://api.rivalika.md*
 | [**deleteReport**](ReportsApi.md#deletereport) | **DELETE** /api/v1/reports/{report_id} | Retire a report definition and retain its history |
 | [**downloadReportRun**](ReportsApi.md#downloadreportrun) | **GET** /api/v1/report-runs/{report_run_id}/download | Download a completed report |
 | [**getReport**](ReportsApi.md#getreport) | **GET** /api/v1/reports/{report_id} | Get a report definition |
+| [**getReportRun**](ReportsApi.md#getreportrun) | **GET** /api/v1/reports/{report_id}/runs/{report_run_id} | Get a report run with its key figures and findings |
 | [**listReportRuns**](ReportsApi.md#listreportruns) | **GET** /api/v1/reports/{report_id}/runs | List report generation attempts |
+| [**listReportingTemplates**](ReportsApi.md#listreportingtemplates) | **GET** /api/v1/report-templates | List report and export templates with their readiness |
 | [**listReports**](ReportsApi.md#listreports) | **GET** /api/v1/reports | List report definitions |
+| [**previewReport**](ReportsApi.md#previewreportoperation) | **POST** /api/v1/reports/preview | Preview what a report definition would cover |
 | [**updateReport**](ReportsApi.md#updatereportoperation) | **PATCH** /api/v1/reports/{report_id} | Update a report definition |
 
 
@@ -394,6 +397,83 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## getReportRun
+
+> DataEnvelope getReportRun(reportId, reportRunId)
+
+Get a report run with its key figures and findings
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { GetReportRunRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  const body = {
+    // string
+    reportId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // string
+    reportRunId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies GetReportRunRequest;
+
+  try {
+    const data = await api.getReportRun(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **reportId** | `string` |  | [Defaults to `undefined`] |
+| **reportRunId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## listReportRuns
 
 > ListEnvelope listReportRuns(reportId)
@@ -440,6 +520,72 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **reportId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listReportingTemplates
+
+> ListEnvelope listReportingTemplates()
+
+List report and export templates with their readiness
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { ListReportingTemplatesRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  try {
+    const data = await api.listReportingTemplates();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
 
 ### Return type
 
@@ -544,6 +690,80 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## previewReport
+
+> DataEnvelope previewReport(previewReportRequest)
+
+Preview what a report definition would cover
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ReportsApi,
+} from '@rivalika/sdk';
+import type { PreviewReportOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ReportsApi(config);
+
+  const body = {
+    // PreviewReportRequest
+    previewReportRequest: ...,
+  } satisfies PreviewReportOperationRequest;
+
+  try {
+    const data = await api.previewReport(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **previewReportRequest** | [PreviewReportRequest](PreviewReportRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`, `application/problem+json`
 
 

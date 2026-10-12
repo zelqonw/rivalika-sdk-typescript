@@ -21,6 +21,10 @@ docs/CreateCommercialImportRequest.md
 docs/CreateCommercialPartnerRequest.md
 docs/CreateCommercialProductRequest.md
 docs/CreateExportRequest.md
+docs/CreateExportScheduleRequest.md
+docs/CreateExportScheduleRequestDateWindow.md
+docs/CreateExportScheduleRequestRecipientsInner.md
+docs/CreateExportScheduleRequestRequest.md
 docs/CreateReportRequest.md
 docs/CreateRepricerExclusionRequest.md
 docs/CreateRepricerPolicyRequest.md
@@ -28,11 +32,11 @@ docs/CreateWebhookEndpointRequest.md
 docs/CreateWebhookEndpointRequestSubscriptionsInner.md
 docs/DataEnvelope.md
 docs/DeleteCommercialProductRequest.md
-docs/EstimateExportRequest.md
 docs/ExportsApi.md
 docs/ListEnvelope.md
 docs/ListEnvelopePage.md
 docs/PrepareCommercialImportUploadRequest.md
+docs/PreviewReportRequest.md
 docs/PricingApi.md
 docs/Problem.md
 docs/ReceiveRivalikaWebhookRequest.md
@@ -80,6 +84,10 @@ src/models/CreateCommercialImportRequest.ts
 src/models/CreateCommercialPartnerRequest.ts
 src/models/CreateCommercialProductRequest.ts
 src/models/CreateExportRequest.ts
+src/models/CreateExportScheduleRequest.ts
+src/models/CreateExportScheduleRequestDateWindow.ts
+src/models/CreateExportScheduleRequestRecipientsInner.ts
+src/models/CreateExportScheduleRequestRequest.ts
 src/models/CreateReportRequest.ts
 src/models/CreateRepricerExclusionRequest.ts
 src/models/CreateRepricerPolicyRequest.ts
@@ -87,10 +95,10 @@ src/models/CreateWebhookEndpointRequest.ts
 src/models/CreateWebhookEndpointRequestSubscriptionsInner.ts
 src/models/DataEnvelope.ts
 src/models/DeleteCommercialProductRequest.ts
-src/models/EstimateExportRequest.ts
 src/models/ListEnvelope.ts
 src/models/ListEnvelopePage.ts
 src/models/PrepareCommercialImportUploadRequest.ts
+src/models/PreviewReportRequest.ts
 src/models/Problem.ts
 src/models/ReceiveRivalikaWebhookRequest.ts
 src/models/SetAlertRuleRecipientsRequest.ts
