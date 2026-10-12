@@ -19,6 +19,10 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, rivalika, light]
     steps:
+      - name: reclaim the workspace
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" --entrypoint chown \
+            openapitools/openapi-generator-cli:v7.22.0 -R "$(id -u):$(id -g)" /work
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
@@ -45,20 +49,24 @@ jobs:
     # The SDK is generated, not written. If the committed tree and a fresh
     # generation from the same spec disagree, someone hand-edited generated
     # code and the next sync would silently revert them.
-    container:
-      image: openapitools/openapi-generator-cli:v7.22.0
-      options: --entrypoint ''
     steps:
-      # Before the checkout, not after: actions/checkout falls back to
-      # downloading a source tarball when git is missing, and a tree with no
-      # .git in it cannot be diffed. That failure looks like a git usage
-      # error, which is a long way from its cause.
-      - name: install git
+      # Jobs from older workflow versions ran as root and left root-owned
+      # files that break actions/checkout; hand them back to the runner user.
+      - name: reclaim the workspace
         run: |
-          apt-get update -qq && apt-get install -y -qq git
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" --entrypoint chown \
+            openapitools/openapi-generator-cli:v7.22.0 -R "$(id -u):$(id -g)" /work
       - uses: actions/checkout@v6
       - name: regenerate
-        run: openapi-generator-cli generate -c openapi-generator-config.json
+        # As the runner user, not in a root job container: root-owned files in
+        # the persistent workspace break every later checkout on this runner.
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
+            --entrypoint openapi-generator-cli \
+            openapitools/openapi-generator-cli:v7.22.0 \
+            generate -c openapi-generator-config.json
       - name: the tree must be unchanged
-        run: git diff --exit-code
+        run: |
+          git status --porcelain
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
