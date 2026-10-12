@@ -21,6 +21,16 @@ const checks = [
   ['alert rules', () => new sdk.AlertsApi(configuration).listAlertRules({ size: 5 })],
   ['reports', () => new sdk.ReportsApi(configuration).listReports({ size: 5 })],
   ['webhook endpoints', () => new sdk.WebhooksApi(configuration).listWebhookEndpoints()],
+  [
+    'commercial import detail',
+    // A typed detail model, not a list of plain records: catches a changed
+    // required field or format that list envelopes would let through.
+    async () => {
+      const imports = new sdk.CommercialImportsApi(configuration)
+      const [first] = (await imports.listCommercialImports({ size: 1 })).data
+      return first ? imports.getCommercialImport({ importId: first.id }) : { data: {} }
+    },
+  ],
 ]
 // Operations newer than some generated trees: checked when present.
 if (typeof sdk.ExportsApi.prototype.listExportSchedules === 'function')
