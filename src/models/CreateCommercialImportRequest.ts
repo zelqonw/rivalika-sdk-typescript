@@ -63,10 +63,10 @@ export interface CreateCommercialImportRequest {
     mapping?: { [key: string]: any; };
     /**
      * 
-     * @type {CreateCommercialImportRequestAutoMatchEnabledEnum}
+     * @type {boolean}
      * @memberof CreateCommercialImportRequest
      */
-    autoMatchEnabled?: CreateCommercialImportRequestAutoMatchEnabledEnum;
+    autoMatchEnabled?: boolean;
     /**
      * 
      * @type {Array<string>}
@@ -80,16 +80,6 @@ export interface CreateCommercialImportRequest {
      */
     dryRun?: boolean;
 }
-
-
-/**
- * @export
- */
-export const CreateCommercialImportRequestAutoMatchEnabledEnum = {
-    False: false
-} as const;
-export type CreateCommercialImportRequestAutoMatchEnabledEnum = typeof CreateCommercialImportRequestAutoMatchEnabledEnum[keyof typeof CreateCommercialImportRequestAutoMatchEnabledEnum];
-
 
 /**
  * Check if a given object implements the CreateCommercialImportRequest interface.

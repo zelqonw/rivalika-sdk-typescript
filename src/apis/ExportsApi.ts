@@ -24,15 +24,20 @@ import {
     CreateExportRequestToJSON,
 } from '../models/CreateExportRequest';
 import {
+    type CreateExportScheduleRequest,
+    CreateExportScheduleRequestFromJSON,
+    CreateExportScheduleRequestToJSON,
+} from '../models/CreateExportScheduleRequest';
+import {
+    type CreateExportScheduleRequestRequest,
+    CreateExportScheduleRequestRequestFromJSON,
+    CreateExportScheduleRequestRequestToJSON,
+} from '../models/CreateExportScheduleRequestRequest';
+import {
     type DataEnvelope,
     DataEnvelopeFromJSON,
     DataEnvelopeToJSON,
 } from '../models/DataEnvelope';
-import {
-    type EstimateExportRequest,
-    EstimateExportRequestFromJSON,
-    EstimateExportRequestToJSON,
-} from '../models/EstimateExportRequest';
 import {
     type ListEnvelope,
     ListEnvelopeFromJSON,
@@ -54,17 +59,35 @@ export interface CreateExportOperationRequest {
     createExportRequest: CreateExportRequest;
 }
 
+export interface CreateExportScheduleOperationRequest {
+    idempotencyKey: string;
+    createExportScheduleRequest: CreateExportScheduleRequest;
+}
+
+export interface DeleteExportScheduleRequest {
+    idempotencyKey: string;
+    exportScheduleId: string;
+}
+
 export interface DownloadExportRequest {
     exportId: string;
 }
 
-export interface EstimateExportOperationRequest {
+export interface DownloadLatestScheduledExportRequest {
+    exportScheduleId: string;
+}
+
+export interface EstimateExportRequest {
     idempotencyKey: string;
-    estimateExportRequest: EstimateExportRequest;
+    createExportScheduleRequestRequest: CreateExportScheduleRequestRequest;
 }
 
 export interface GetExportRequest {
     exportId: string;
+}
+
+export interface GetExportScheduleRequest {
+    exportScheduleId: string;
 }
 
 export interface ListExportsRequest {
@@ -82,6 +105,17 @@ export interface ListExportsRequest {
 export interface RetryExportRequest {
     idempotencyKey: string;
     exportId: string;
+}
+
+export interface RunExportScheduleRequest {
+    idempotencyKey: string;
+    exportScheduleId: string;
+}
+
+export interface UpdateExportScheduleRequest {
+    idempotencyKey: string;
+    exportScheduleId: string;
+    requestBody: { [key: string]: any; };
 }
 
 /**
@@ -142,6 +176,56 @@ export interface ExportsApiInterface {
     createExport(requestParameters: CreateExportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AcceptedEnvelope>;
 
     /**
+     * Creates request options for createExportSchedule without sending the request
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {CreateExportScheduleRequest} createExportScheduleRequest 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    createExportScheduleRequestOpts(requestParameters: CreateExportScheduleOperationRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Create an export schedule
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {CreateExportScheduleRequest} createExportScheduleRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    createExportScheduleRaw(requestParameters: CreateExportScheduleOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Create an export schedule
+     */
+    createExportSchedule(requestParameters: CreateExportScheduleOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
+     * Creates request options for deleteExportSchedule without sending the request
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    deleteExportScheduleRequestOpts(requestParameters: DeleteExportScheduleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Delete an export schedule
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    deleteExportScheduleRaw(requestParameters: DeleteExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Delete an export schedule
+     */
+    deleteExportSchedule(requestParameters: DeleteExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
      * Creates request options for downloadExport without sending the request
      * @param {string} exportId 
      * @throws {RequiredError}
@@ -165,29 +249,52 @@ export interface ExportsApiInterface {
     downloadExport(requestParameters: DownloadExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
 
     /**
-     * Creates request options for estimateExport without sending the request
-     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
-     * @param {EstimateExportRequest} estimateExportRequest 
+     * Creates request options for downloadLatestScheduledExport without sending the request
+     * @param {string} exportScheduleId 
      * @throws {RequiredError}
      * @memberof ExportsApiInterface
      */
-    estimateExportRequestOpts(requestParameters: EstimateExportOperationRequest): Promise<runtime.RequestOpts>;
+    downloadLatestScheduledExportRequestOpts(requestParameters: DownloadLatestScheduledExportRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Download an export schedule\'s newest file
+     * @param {string} exportScheduleId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    downloadLatestScheduledExportRaw(requestParameters: DownloadLatestScheduledExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Download an export schedule\'s newest file
+     */
+    downloadLatestScheduledExport(requestParameters: DownloadLatestScheduledExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
+     * Creates request options for estimateExport without sending the request
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {CreateExportScheduleRequestRequest} createExportScheduleRequestRequest 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    estimateExportRequestOpts(requestParameters: EstimateExportRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 
      * @summary Estimate an export
      * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
-     * @param {EstimateExportRequest} estimateExportRequest 
+     * @param {CreateExportScheduleRequestRequest} createExportScheduleRequestRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExportsApiInterface
      */
-    estimateExportRaw(requestParameters: EstimateExportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+    estimateExportRaw(requestParameters: EstimateExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
 
     /**
      * Estimate an export
      */
-    estimateExport(requestParameters: EstimateExportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+    estimateExport(requestParameters: EstimateExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
 
     /**
      * Creates request options for getExport without sending the request
@@ -211,6 +318,50 @@ export interface ExportsApiInterface {
      * Get an export
      */
     getExport(requestParameters: GetExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
+     * Creates request options for getExportSchedule without sending the request
+     * @param {string} exportScheduleId 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    getExportScheduleRequestOpts(requestParameters: GetExportScheduleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Get an export schedule
+     * @param {string} exportScheduleId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    getExportScheduleRaw(requestParameters: GetExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Get an export schedule
+     */
+    getExportSchedule(requestParameters: GetExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
+     * Creates request options for listExportSchedules without sending the request
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    listExportSchedulesRequestOpts(): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary List export schedules
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    listExportSchedulesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEnvelope>>;
+
+    /**
+     * List export schedules
+     */
+    listExportSchedules(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope>;
 
     /**
      * Creates request options for listExports without sending the request
@@ -275,6 +426,58 @@ export interface ExportsApiInterface {
      * Retry an export
      */
     retryExport(requestParameters: RetryExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
+
+    /**
+     * Creates request options for runExportSchedule without sending the request
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    runExportScheduleRequestOpts(requestParameters: RunExportScheduleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Run an export schedule now
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    runExportScheduleRaw(requestParameters: RunExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AcceptedEnvelope>>;
+
+    /**
+     * Run an export schedule now
+     */
+    runExportSchedule(requestParameters: RunExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AcceptedEnvelope>;
+
+    /**
+     * Creates request options for updateExportSchedule without sending the request
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @param {{ [key: string]: any; }} requestBody 
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    updateExportScheduleRequestOpts(requestParameters: UpdateExportScheduleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 
+     * @summary Update, pause or resume an export schedule
+     * @param {string} idempotencyKey Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+     * @param {string} exportScheduleId 
+     * @param {{ [key: string]: any; }} requestBody 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ExportsApiInterface
+     */
+    updateExportScheduleRaw(requestParameters: UpdateExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>>;
+
+    /**
+     * Update, pause or resume an export schedule
+     */
+    updateExportSchedule(requestParameters: UpdateExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope>;
 
 }
 
@@ -414,6 +617,136 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
     }
 
     /**
+     * Creates request options for createExportSchedule without sending the request
+     */
+    async createExportScheduleRequestOpts(requestParameters: CreateExportScheduleOperationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['idempotencyKey'] == null) {
+            throw new runtime.RequiredError(
+                'idempotencyKey',
+                'Required parameter "idempotencyKey" was null or undefined when calling createExportSchedule().'
+            );
+        }
+
+        if (requestParameters['createExportScheduleRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createExportScheduleRequest',
+                'Required parameter "createExportScheduleRequest" was null or undefined when calling createExportSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['idempotencyKey'] != null) {
+            headerParameters['Idempotency-Key'] = String(requestParameters['idempotencyKey']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:write"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateExportScheduleRequestToJSON(requestParameters['createExportScheduleRequest']),
+        };
+    }
+
+    /**
+     * Create an export schedule
+     */
+    async createExportScheduleRaw(requestParameters: CreateExportScheduleOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.createExportScheduleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Create an export schedule
+     */
+    async createExportSchedule(requestParameters: CreateExportScheduleOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.createExportScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for deleteExportSchedule without sending the request
+     */
+    async deleteExportScheduleRequestOpts(requestParameters: DeleteExportScheduleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['idempotencyKey'] == null) {
+            throw new runtime.RequiredError(
+                'idempotencyKey',
+                'Required parameter "idempotencyKey" was null or undefined when calling deleteExportSchedule().'
+            );
+        }
+
+        if (requestParameters['exportScheduleId'] == null) {
+            throw new runtime.RequiredError(
+                'exportScheduleId',
+                'Required parameter "exportScheduleId" was null or undefined when calling deleteExportSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['idempotencyKey'] != null) {
+            headerParameters['Idempotency-Key'] = String(requestParameters['idempotencyKey']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:write"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules/{export_schedule_id}`;
+        urlPath = urlPath.replace('{export_schedule_id}', encodeURIComponent(String(requestParameters['exportScheduleId'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Delete an export schedule
+     */
+    async deleteExportScheduleRaw(requestParameters: DeleteExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.deleteExportScheduleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Delete an export schedule
+     */
+    async deleteExportSchedule(requestParameters: DeleteExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.deleteExportScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for downloadExport without sending the request
      */
     async downloadExportRequestOpts(requestParameters: DownloadExportRequest): Promise<runtime.RequestOpts> {
@@ -467,9 +800,62 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
     }
 
     /**
+     * Creates request options for downloadLatestScheduledExport without sending the request
+     */
+    async downloadLatestScheduledExportRequestOpts(requestParameters: DownloadLatestScheduledExportRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['exportScheduleId'] == null) {
+            throw new runtime.RequiredError(
+                'exportScheduleId',
+                'Required parameter "exportScheduleId" was null or undefined when calling downloadLatestScheduledExport().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules/{export_schedule_id}/latest/download`;
+        urlPath = urlPath.replace('{export_schedule_id}', encodeURIComponent(String(requestParameters['exportScheduleId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Download an export schedule\'s newest file
+     */
+    async downloadLatestScheduledExportRaw(requestParameters: DownloadLatestScheduledExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.downloadLatestScheduledExportRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Download an export schedule\'s newest file
+     */
+    async downloadLatestScheduledExport(requestParameters: DownloadLatestScheduledExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.downloadLatestScheduledExportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for estimateExport without sending the request
      */
-    async estimateExportRequestOpts(requestParameters: EstimateExportOperationRequest): Promise<runtime.RequestOpts> {
+    async estimateExportRequestOpts(requestParameters: EstimateExportRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['idempotencyKey'] == null) {
             throw new runtime.RequiredError(
                 'idempotencyKey',
@@ -477,10 +863,10 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
             );
         }
 
-        if (requestParameters['estimateExportRequest'] == null) {
+        if (requestParameters['createExportScheduleRequestRequest'] == null) {
             throw new runtime.RequiredError(
-                'estimateExportRequest',
-                'Required parameter "estimateExportRequest" was null or undefined when calling estimateExport().'
+                'createExportScheduleRequestRequest',
+                'Required parameter "createExportScheduleRequestRequest" was null or undefined when calling estimateExport().'
             );
         }
 
@@ -510,14 +896,14 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: EstimateExportRequestToJSON(requestParameters['estimateExportRequest']),
+            body: CreateExportScheduleRequestRequestToJSON(requestParameters['createExportScheduleRequestRequest']),
         };
     }
 
     /**
      * Estimate an export
      */
-    async estimateExportRaw(requestParameters: EstimateExportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+    async estimateExportRaw(requestParameters: EstimateExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
         const requestOptions = await this.estimateExportRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
@@ -527,7 +913,7 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
     /**
      * Estimate an export
      */
-    async estimateExport(requestParameters: EstimateExportOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+    async estimateExport(requestParameters: EstimateExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
         const response = await this.estimateExportRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -582,6 +968,104 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
      */
     async getExport(requestParameters: GetExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
         const response = await this.getExportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for getExportSchedule without sending the request
+     */
+    async getExportScheduleRequestOpts(requestParameters: GetExportScheduleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['exportScheduleId'] == null) {
+            throw new runtime.RequiredError(
+                'exportScheduleId',
+                'Required parameter "exportScheduleId" was null or undefined when calling getExportSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules/{export_schedule_id}`;
+        urlPath = urlPath.replace('{export_schedule_id}', encodeURIComponent(String(requestParameters['exportScheduleId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get an export schedule
+     */
+    async getExportScheduleRaw(requestParameters: GetExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.getExportScheduleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an export schedule
+     */
+    async getExportSchedule(requestParameters: GetExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.getExportScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listExportSchedules without sending the request
+     */
+    async listExportSchedulesRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:read"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * List export schedules
+     */
+    async listExportSchedulesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEnvelope>> {
+        const requestOptions = await this.listExportSchedulesRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * List export schedules
+     */
+    async listExportSchedules(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEnvelope> {
+        const response = await this.listExportSchedulesRaw(initOverrides);
         return await response.value();
     }
 
@@ -727,6 +1211,144 @@ export class ExportsApi extends runtime.BaseAPI implements ExportsApiInterface {
      */
     async retryExport(requestParameters: RetryExportRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
         const response = await this.retryExportRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for runExportSchedule without sending the request
+     */
+    async runExportScheduleRequestOpts(requestParameters: RunExportScheduleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['idempotencyKey'] == null) {
+            throw new runtime.RequiredError(
+                'idempotencyKey',
+                'Required parameter "idempotencyKey" was null or undefined when calling runExportSchedule().'
+            );
+        }
+
+        if (requestParameters['exportScheduleId'] == null) {
+            throw new runtime.RequiredError(
+                'exportScheduleId',
+                'Required parameter "exportScheduleId" was null or undefined when calling runExportSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['idempotencyKey'] != null) {
+            headerParameters['Idempotency-Key'] = String(requestParameters['idempotencyKey']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:write"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules/{export_schedule_id}/runs`;
+        urlPath = urlPath.replace('{export_schedule_id}', encodeURIComponent(String(requestParameters['exportScheduleId'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Run an export schedule now
+     */
+    async runExportScheduleRaw(requestParameters: RunExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AcceptedEnvelope>> {
+        const requestOptions = await this.runExportScheduleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AcceptedEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Run an export schedule now
+     */
+    async runExportSchedule(requestParameters: RunExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AcceptedEnvelope> {
+        const response = await this.runExportScheduleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updateExportSchedule without sending the request
+     */
+    async updateExportScheduleRequestOpts(requestParameters: UpdateExportScheduleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['idempotencyKey'] == null) {
+            throw new runtime.RequiredError(
+                'idempotencyKey',
+                'Required parameter "idempotencyKey" was null or undefined when calling updateExportSchedule().'
+            );
+        }
+
+        if (requestParameters['exportScheduleId'] == null) {
+            throw new runtime.RequiredError(
+                'exportScheduleId',
+                'Required parameter "exportScheduleId" was null or undefined when calling updateExportSchedule().'
+            );
+        }
+
+        if (requestParameters['requestBody'] == null) {
+            throw new runtime.RequiredError(
+                'requestBody',
+                'Required parameter "requestBody" was null or undefined when calling updateExportSchedule().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (requestParameters['idempotencyKey'] != null) {
+            headerParameters['Idempotency-Key'] = String(requestParameters['idempotencyKey']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("RivalikaApiKey", ["exports:write"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/api/v1/export-schedules/{export_schedule_id}`;
+        urlPath = urlPath.replace('{export_schedule_id}', encodeURIComponent(String(requestParameters['exportScheduleId'])));
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['requestBody'],
+        };
+    }
+
+    /**
+     * Update, pause or resume an export schedule
+     */
+    async updateExportScheduleRaw(requestParameters: UpdateExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DataEnvelope>> {
+        const requestOptions = await this.updateExportScheduleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DataEnvelopeFromJSON(jsonValue));
+    }
+
+    /**
+     * Update, pause or resume an export schedule
+     */
+    async updateExportSchedule(requestParameters: UpdateExportScheduleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DataEnvelope> {
+        const response = await this.updateExportScheduleRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

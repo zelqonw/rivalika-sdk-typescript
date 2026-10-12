@@ -6,11 +6,18 @@ All URIs are relative to *https://api.rivalika.md*
 |------------- | ------------- | -------------|
 | [**cancelExport**](ExportsApi.md#cancelexport) | **POST** /api/v1/exports/{export_id}/cancel | Cancel an export |
 | [**createExport**](ExportsApi.md#createexportoperation) | **POST** /api/v1/exports | Create an export |
+| [**createExportSchedule**](ExportsApi.md#createexportscheduleoperation) | **POST** /api/v1/export-schedules | Create an export schedule |
+| [**deleteExportSchedule**](ExportsApi.md#deleteexportschedule) | **DELETE** /api/v1/export-schedules/{export_schedule_id} | Delete an export schedule |
 | [**downloadExport**](ExportsApi.md#downloadexport) | **GET** /api/v1/exports/{export_id}/download | Download a completed export |
-| [**estimateExport**](ExportsApi.md#estimateexportoperation) | **POST** /api/v1/exports/estimate | Estimate an export |
+| [**downloadLatestScheduledExport**](ExportsApi.md#downloadlatestscheduledexport) | **GET** /api/v1/export-schedules/{export_schedule_id}/latest/download | Download an export schedule\&#39;s newest file |
+| [**estimateExport**](ExportsApi.md#estimateexport) | **POST** /api/v1/exports/estimate | Estimate an export |
 | [**getExport**](ExportsApi.md#getexport) | **GET** /api/v1/exports/{export_id} | Get an export |
+| [**getExportSchedule**](ExportsApi.md#getexportschedule) | **GET** /api/v1/export-schedules/{export_schedule_id} | Get an export schedule |
+| [**listExportSchedules**](ExportsApi.md#listexportschedules) | **GET** /api/v1/export-schedules | List export schedules |
 | [**listExports**](ExportsApi.md#listexports) | **GET** /api/v1/exports | List exports |
 | [**retryExport**](ExportsApi.md#retryexport) | **POST** /api/v1/exports/{export_id}/retry | Retry an export |
+| [**runExportSchedule**](ExportsApi.md#runexportschedule) | **POST** /api/v1/export-schedules/{export_schedule_id}/runs | Run an export schedule now |
+| [**updateExportSchedule**](ExportsApi.md#updateexportschedule) | **PATCH** /api/v1/export-schedules/{export_schedule_id} | Update, pause or resume an export schedule |
 
 
 
@@ -168,6 +175,160 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## createExportSchedule
+
+> DataEnvelope createExportSchedule(idempotencyKey, createExportScheduleRequest)
+
+Create an export schedule
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { CreateExportScheduleOperationRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // CreateExportScheduleRequest
+    createExportScheduleRequest: ...,
+  } satisfies CreateExportScheduleOperationRequest;
+
+  try {
+    const data = await api.createExportSchedule(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **createExportScheduleRequest** | [CreateExportScheduleRequest](CreateExportScheduleRequest.md) |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **201** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deleteExportSchedule
+
+> DataEnvelope deleteExportSchedule(idempotencyKey, exportScheduleId)
+
+Delete an export schedule
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { DeleteExportScheduleRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    exportScheduleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies DeleteExportScheduleRequest;
+
+  try {
+    const data = await api.deleteExportSchedule(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **exportScheduleId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## downloadExport
 
 > DataEnvelope downloadExport(exportId)
@@ -242,9 +403,83 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## downloadLatestScheduledExport
+
+> DataEnvelope downloadLatestScheduledExport(exportScheduleId)
+
+Download an export schedule\&#39;s newest file
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { DownloadLatestScheduledExportRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string
+    exportScheduleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies DownloadLatestScheduledExportRequest;
+
+  try {
+    const data = await api.downloadLatestScheduledExport(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **exportScheduleId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## estimateExport
 
-> DataEnvelope estimateExport(idempotencyKey, estimateExportRequest)
+> DataEnvelope estimateExport(idempotencyKey, createExportScheduleRequestRequest)
 
 Estimate an export
 
@@ -255,7 +490,7 @@ import {
   Configuration,
   ExportsApi,
 } from '@rivalika/sdk';
-import type { EstimateExportOperationRequest } from '@rivalika/sdk';
+import type { EstimateExportRequest } from '@rivalika/sdk';
 
 async function example() {
   console.log("🚀 Testing @rivalika/sdk SDK...");
@@ -268,9 +503,9 @@ async function example() {
   const body = {
     // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
     idempotencyKey: idempotencyKey_example,
-    // EstimateExportRequest
-    estimateExportRequest: ...,
-  } satisfies EstimateExportOperationRequest;
+    // CreateExportScheduleRequestRequest
+    createExportScheduleRequestRequest: ...,
+  } satisfies EstimateExportRequest;
 
   try {
     const data = await api.estimateExport(body);
@@ -290,7 +525,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
-| **estimateExportRequest** | [EstimateExportRequest](EstimateExportRequest.md) |  | |
+| **createExportScheduleRequestRequest** | [CreateExportScheduleRequestRequest](CreateExportScheduleRequestRequest.md) |  | |
 
 ### Return type
 
@@ -369,6 +604,146 @@ example().catch(console.error);
 ### Return type
 
 [**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getExportSchedule
+
+> DataEnvelope getExportSchedule(exportScheduleId)
+
+Get an export schedule
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { GetExportScheduleRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string
+    exportScheduleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies GetExportScheduleRequest;
+
+  try {
+    const data = await api.getExportSchedule(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **exportScheduleId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listExportSchedules
+
+> ListEnvelope listExportSchedules()
+
+List export schedules
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { ListExportSchedulesRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  try {
+    const data = await api.listExportSchedules();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ListEnvelope**](ListEnvelope.md)
 
 ### Authorization
 
@@ -552,6 +927,163 @@ example().catch(console.error);
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Success |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## runExportSchedule
+
+> AcceptedEnvelope runExportSchedule(idempotencyKey, exportScheduleId)
+
+Run an export schedule now
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { RunExportScheduleRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    exportScheduleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+  } satisfies RunExportScheduleRequest;
+
+  try {
+    const data = await api.runExportSchedule(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **exportScheduleId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**AcceptedEnvelope**](AcceptedEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`, `application/problem+json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **202** | Accepted |  -  |
+| **400** | Invalid request |  -  |
+| **401** | Invalid or expired API key |  -  |
+| **403** | Missing required scope |  -  |
+| **409** | Conflict or idempotency mismatch |  -  |
+| **429** | Rate or concurrency limit exceeded |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateExportSchedule
+
+> DataEnvelope updateExportSchedule(idempotencyKey, exportScheduleId, requestBody)
+
+Update, pause or resume an export schedule
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ExportsApi,
+} from '@rivalika/sdk';
+import type { UpdateExportScheduleRequest } from '@rivalika/sdk';
+
+async function example() {
+  console.log("🚀 Testing @rivalika/sdk SDK...");
+  const config = new Configuration({ 
+    // Configure HTTP bearer authorization: RivalikaApiKey
+    accessToken: "YOUR BEARER TOKEN",
+  });
+  const api = new ExportsApi(config);
+
+  const body = {
+    // string | Unique key retained for 24 hours. Reusing a key with another payload returns 409.
+    idempotencyKey: idempotencyKey_example,
+    // string
+    exportScheduleId: 38400000-8cf0-11bd-b23e-10b96e4ef00d,
+    // { [key: string]: any; }
+    requestBody: Object,
+  } satisfies UpdateExportScheduleRequest;
+
+  try {
+    const data = await api.updateExportSchedule(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **idempotencyKey** | `string` | Unique key retained for 24 hours. Reusing a key with another payload returns 409. | [Defaults to `undefined`] |
+| **exportScheduleId** | `string` |  | [Defaults to `undefined`] |
+| **requestBody** | `{ [key: string]: any; }` |  | |
+
+### Return type
+
+[**DataEnvelope**](DataEnvelope.md)
+
+### Authorization
+
+[RivalikaApiKey](../README.md#RivalikaApiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`, `application/problem+json`
 
 
