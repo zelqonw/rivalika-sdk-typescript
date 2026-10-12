@@ -19,6 +19,10 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: [self-hosted, rivalika, light]
     steps:
+      - name: reclaim the workspace
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" --entrypoint chown \
+            openapitools/openapi-generator-cli:v7.22.0 -R "$(id -u):$(id -g)" /work
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
