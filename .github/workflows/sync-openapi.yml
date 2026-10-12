@@ -1,11 +1,13 @@
 name: Sync OpenAPI
+# The monorepo finds the run it dispatched by this title and waits for its
+# result, so a failed sync shows up as a failed "Sync SDKs" run there.
+run-name: Sync OpenAPI ${{ github.event.client_payload.request_id || inputs.request_id || github.event.client_payload.spec_sha || inputs.spec_sha }}
 
-# The monorepo sends this when its public API spec changes on main.
+# The monorepo sends this when the public API spec on its main differs from
+# the spec committed here (and from the pending bot/openapi-sync branch).
 #
-# GitLab did it with a cross-project pipeline trigger authenticated by
-# JOB-TOKEN. GitHub has no equivalent, so the monorepo dispatches and this
-# regenerates. The spec is ~256 KB, well over the 64 KB a client_payload can
-# carry, so the payload names the commit and this job fetches it.
+# The spec is ~256 KB, well over the 64 KB a client_payload can carry, so the
+# payload names the commit and this job fetches it.
 on:
   repository_dispatch:
     types: [openapi-updated]
@@ -14,6 +16,9 @@ on:
       spec_sha:
         description: Monorepo commit to generate from
         required: true
+      request_id:
+        description: Optional correlation id shown in the run name
+        required: false
 
 permissions:
   contents: read
@@ -25,18 +30,19 @@ concurrency:
 env:
   SPEC_REPO: zelqonw/rivalika
   SPEC_PATH: packages/contracts/openapi/generated/rivalika-public-api.json
+  SYNC_BRANCH: bot/openapi-sync
 
 jobs:
   regenerate:
-    outputs:
-      source: ${{ steps.request.outputs.sha }}
-      pr: ${{ steps.pull-request.outputs.pull-request-number }}
-      operation: ${{ steps.pull-request.outputs.pull-request-operation }}
     name: regenerate and open a pull request
     runs-on: [self-hosted, rivalika, heavy]
+    timeout-minutes: 20
     permissions:
       contents: write
       pull-requests: write
+      # Starts Verify on the bot branch: pull requests opened with
+      # GITHUB_TOKEN trigger no workflows, but workflow_dispatch is allowed.
+      actions: write
     steps:
       - uses: actions/checkout@v6
 
@@ -59,19 +65,24 @@ jobs:
           # can read a workflow run can read client_payload.
           GH_TOKEN: ${{ secrets.MONOREPO_READ_TOKEN }}
           SHA: ${{ steps.request.outputs.sha }}
+        # curl, not gh: the self-hosted runners do not all have the GitHub CLI.
         run: |
           test -n "$GH_TOKEN" || {
             echo 'MONOREPO_READ_TOKEN is not set; this repository cannot read the spec.' >&2
             exit 1
           }
-          gh api "repos/${SPEC_REPO}/contents/${SPEC_PATH}?ref=${SHA}" \
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
             --header 'Accept: application/vnd.github.raw' \
-            > openapi/rivalika-public-api.json
+            --output openapi/rivalika-public-api.json \
+            "https://api.github.com/repos/${SPEC_REPO}/contents/${SPEC_PATH}?ref=${SHA}"
           python3 -m json.tool openapi/rivalika-public-api.json > /dev/null
 
       - name: regenerate
+        # As the runner user: files a root container writes into the
+        # persistent workspace break every later checkout on this runner.
         run: |
-          docker run --rm -v "$PWD:/work" -w /work \
+          docker run --rm --user "$(id -u):$(id -g)" -v "$PWD:/work" -w /work \
             --entrypoint openapi-generator-cli \
             openapitools/openapi-generator-cli:v7.22.0 \
             generate -c openapi-generator-config.json
@@ -80,7 +91,10 @@ jobs:
         id: pull-request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 (Node 24)
         with:
-          branch: bot/openapi-${{ steps.request.outputs.short }}
+          # One standing branch: a newer spec updates the open pull request
+          # instead of opening another one.
+          branch: ${{ env.SYNC_BRANCH }}
+          base: main
           delete-branch: true
           commit-message: 'chore: regenerate from OpenAPI ${{ steps.request.outputs.short }}'
           title: 'chore: regenerate from OpenAPI ${{ steps.request.outputs.short }}'
@@ -95,32 +109,13 @@ jobs:
 
             A sync that changes nothing opens no pull request at all.
 
-  notification-outcome:
-    name: Record notification outcome
-    continue-on-error: true
-    if: always()
-    needs: [regenerate]
-    runs-on: [self-hosted, rivalika, light]
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: '24'
-          package-manager-cache: false
-      - name: Write sanitized outcome
+      - name: verify the pull request
+        if: steps.pull-request.outputs.pull-request-operation == 'created' || steps.pull-request.outputs.pull-request-operation == 'updated'
         env:
-          NOTIFY_KIND: sync
-          NOTIFY_SOURCE: ${{ needs.regenerate.outputs.source }}
-          NOTIFY_PR: ${{ needs.regenerate.outputs.pr }}
-          NOTIFY_OUTCOME: ${{ needs.regenerate.result == 'failure' && 'failed' || needs.regenerate.outputs.operation == 'created' && 'review-ready' || needs.regenerate.outputs.operation == 'updated' && 'review-ready' || 'unchanged' }}
-          NOTIFY_STAGE: ${{ needs.regenerate.result == 'failure' && 'regenerate' || 'complete' }}
-        run: node scripts/notifications/write-outcome.mjs
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: notification-outcome-${{ github.run_attempt }}-sync
-          path: output/notifications/outcome.json
-          retention-days: 14
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --silent --show-error --retry 3 --request POST \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header 'Accept: application/vnd.github+json' \
+            --data "{\"ref\":\"${SYNC_BRANCH}\"}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/verify.yml/dispatches"
