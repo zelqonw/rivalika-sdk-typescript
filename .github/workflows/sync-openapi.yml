@@ -44,6 +44,12 @@ jobs:
       # GITHUB_TOKEN trigger no workflows, but workflow_dispatch is allowed.
       actions: write
     steps:
+      # Jobs from older workflow versions ran as root and left root-owned
+      # files that break actions/checkout; hand them back to the runner user.
+      - name: reclaim the workspace
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/work" --entrypoint chown \
+            openapitools/openapi-generator-cli:v7.22.0 -R "$(id -u):$(id -g)" /work
       - uses: actions/checkout@v6
 
       - name: resolve the request

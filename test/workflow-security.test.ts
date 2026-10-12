@@ -49,8 +49,10 @@ describe("workflow runner security", () => {
     )) {
       const source = readFileSync(join(workflows, name), "utf8");
       expect(source, name).not.toMatch(/^    container:/m);
-      for (const line of source.split("\n").filter((entry) =>
-        entry.includes("docker run"),
+      // The one root container only hands the workspace back to the runner.
+      for (const line of source.split("\n").filter(
+        (entry) =>
+          entry.includes("docker run") && !entry.includes("--entrypoint chown"),
       )) {
         expect(line, `${name}: ${line.trim()}`).toContain(
           '--user "$(id -u):$(id -g)"',
