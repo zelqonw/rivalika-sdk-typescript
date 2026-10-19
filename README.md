@@ -59,7 +59,7 @@ window.
 ```bash
 npm ci
 npm run check
-docker run --rm -w /local -v "$PWD:/local" \
+docker run --rm --user "$(id -u):$(id -g)" -w /local -v "$PWD:/local" \
   openapitools/openapi-generator-cli:v7.22.0 \
   generate -c openapi-generator-config.json
 git diff --exit-code

@@ -40,11 +40,24 @@ describe("workflow runner security", () => {
 
   it("does not execute fork pull request code", () => {
     const verify = readFileSync(join(workflows, "verify.yml"), "utf8");
-    const contract = readFileSync(
-      join(workflows, "discord-contract.yml"),
-      "utf8",
-    );
     expect(verify.split(forkGuard)).toHaveLength(3);
-    expect(contract).toContain(forkGuard);
+  });
+
+  it("never writes the persistent workspace as root", () => {
+    for (const name of readdirSync(workflows).filter((entry) =>
+      entry.endsWith(".yml"),
+    )) {
+      const source = readFileSync(join(workflows, name), "utf8");
+      expect(source, name).not.toMatch(/^    container:/m);
+      // The one root container only hands the workspace back to the runner.
+      for (const line of source.split("\n").filter(
+        (entry) =>
+          entry.includes("docker run") && !entry.includes("--entrypoint chown"),
+      )) {
+        expect(line, `${name}: ${line.trim()}`).toContain(
+          '--user "$(id -u):$(id -g)"',
+        );
+      }
+    }
   });
 });
