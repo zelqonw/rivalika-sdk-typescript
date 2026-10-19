@@ -47,8 +47,10 @@ export interface ListProductsRequest {
     changeType?: string;
     timeRange?: string;
     discounted?: boolean | null;
+    discountCheck?: ListProductsDiscountCheckEnum;
     includeOffers?: boolean | null;
     locale?: string;
+    specFilters?: string;
 }
 
 /**
@@ -136,8 +138,10 @@ export interface CatalogApiInterface {
      * @param {string} [changeType] 
      * @param {string} [timeRange] 
      * @param {boolean} [discounted] 
+     * @param {'real' | 'inflated' | 'insufficientHistory'} [discountCheck] Products with a current offer whose advertised previous price was checked against the lowest price that store charged in the 30 days before the discount: real, inflated (above that low) or insufficientHistory.
      * @param {boolean} [includeOffers] 
      * @param {string} [locale] 
+     * @param {string} [specFilters] JSON array of characteristic filters on the typed attributes of the one category in categoryIds, e.g. [{\&quot;key\&quot;:\&quot;ram_gb\&quot;,\&quot;min\&quot;:16},{\&quot;key\&quot;:\&quot;panel_type\&quot;,\&quot;values\&quot;:[\&quot;ips\&quot;]},{\&quot;key\&quot;:\&quot;smart_tv\&quot;,\&quot;boolean\&quot;:true}].
      * @throws {RequiredError}
      * @memberof CatalogApiInterface
      */
@@ -155,8 +159,10 @@ export interface CatalogApiInterface {
      * @param {string} [changeType] 
      * @param {string} [timeRange] 
      * @param {boolean} [discounted] 
+     * @param {'real' | 'inflated' | 'insufficientHistory'} [discountCheck] Products with a current offer whose advertised previous price was checked against the lowest price that store charged in the 30 days before the discount: real, inflated (above that low) or insufficientHistory.
      * @param {boolean} [includeOffers] 
      * @param {string} [locale] 
+     * @param {string} [specFilters] JSON array of characteristic filters on the typed attributes of the one category in categoryIds, e.g. [{\&quot;key\&quot;:\&quot;ram_gb\&quot;,\&quot;min\&quot;:16},{\&quot;key\&quot;:\&quot;panel_type\&quot;,\&quot;values\&quot;:[\&quot;ips\&quot;]},{\&quot;key\&quot;:\&quot;smart_tv\&quot;,\&quot;boolean\&quot;:true}].
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CatalogApiInterface
@@ -368,12 +374,20 @@ export class CatalogApi extends runtime.BaseAPI implements CatalogApiInterface {
             queryParameters['discounted'] = requestParameters['discounted'];
         }
 
+        if (requestParameters['discountCheck'] != null) {
+            queryParameters['discountCheck'] = requestParameters['discountCheck'];
+        }
+
         if (requestParameters['includeOffers'] != null) {
             queryParameters['includeOffers'] = requestParameters['includeOffers'];
         }
 
         if (requestParameters['locale'] != null) {
             queryParameters['locale'] = requestParameters['locale'];
+        }
+
+        if (requestParameters['specFilters'] != null) {
+            queryParameters['specFilters'] = requestParameters['specFilters'];
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -416,3 +430,13 @@ export class CatalogApi extends runtime.BaseAPI implements CatalogApiInterface {
     }
 
 }
+
+/**
+ * @export
+ */
+export const ListProductsDiscountCheckEnum = {
+    Real: 'real',
+    Inflated: 'inflated',
+    InsufficientHistory: 'insufficientHistory'
+} as const;
+export type ListProductsDiscountCheckEnum = typeof ListProductsDiscountCheckEnum[keyof typeof ListProductsDiscountCheckEnum];

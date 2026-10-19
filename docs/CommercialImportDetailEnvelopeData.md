@@ -17,6 +17,10 @@ Name | Type
 `rejectedRows` | number
 `lastProcessedRow` | number
 `hasErrorReport` | boolean
+`checkedImportId` | string
+`appliedImportId` | string
+`expiresAt` | Date
+`sizeBytes` | number
 `failureSummary` | string
 `errorCode` | string
 `errorParams` | { [key: string]: string; }
@@ -45,6 +49,10 @@ const example = {
   "rejectedRows": null,
   "lastProcessedRow": null,
   "hasErrorReport": null,
+  "checkedImportId": null,
+  "appliedImportId": null,
+  "expiresAt": null,
+  "sizeBytes": null,
   "failureSummary": null,
   "errorCode": null,
   "errorParams": null,

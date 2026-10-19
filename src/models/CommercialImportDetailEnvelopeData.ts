@@ -94,6 +94,30 @@ export interface CommercialImportDetailEnvelopeData {
      */
     hasErrorReport: boolean;
     /**
+     * The validation run this import applies, when it was started from one.
+     * @type {string}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    checkedImportId: string | null;
+    /**
+     * For a validation run: the import that applied it, once one exists.
+     * @type {string}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    appliedImportId: string | null;
+    /**
+     * When the source file and error report are purged.
+     * @type {Date}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    expiresAt: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof CommercialImportDetailEnvelopeData
+     */
+    sizeBytes: number | null;
+    /**
      * 
      * @type {string}
      * @memberof CommercialImportDetailEnvelopeData
@@ -218,6 +242,10 @@ export function instanceOfCommercialImportDetailEnvelopeData(value: object): val
     if (!('rejectedRows' in value) || value['rejectedRows'] === undefined) return false;
     if (!('lastProcessedRow' in value) || value['lastProcessedRow'] === undefined) return false;
     if (!('hasErrorReport' in value) || value['hasErrorReport'] === undefined) return false;
+    if (!('checkedImportId' in value) || value['checkedImportId'] === undefined) return false;
+    if (!('appliedImportId' in value) || value['appliedImportId'] === undefined) return false;
+    if (!('expiresAt' in value) || value['expiresAt'] === undefined) return false;
+    if (!('sizeBytes' in value) || value['sizeBytes'] === undefined) return false;
     if (!('failureSummary' in value) || value['failureSummary'] === undefined) return false;
     if (!('errorCode' in value) || value['errorCode'] === undefined) return false;
     if (!('errorParams' in value) || value['errorParams'] === undefined) return false;
@@ -251,6 +279,10 @@ export function CommercialImportDetailEnvelopeDataFromJSONTyped(json: any, ignor
         'rejectedRows': json['rejected_rows'],
         'lastProcessedRow': json['last_processed_row'],
         'hasErrorReport': json['has_error_report'],
+        'checkedImportId': json['checked_import_id'],
+        'appliedImportId': json['applied_import_id'],
+        'expiresAt': (new Date(json['expires_at'])),
+        'sizeBytes': json['size_bytes'],
         'failureSummary': json['failure_summary'],
         'errorCode': json['error_code'],
         'errorParams': json['error_params'],
@@ -285,6 +317,10 @@ export function CommercialImportDetailEnvelopeDataToJSONTyped(value?: Commercial
         'rejected_rows': value['rejectedRows'],
         'last_processed_row': value['lastProcessedRow'],
         'has_error_report': value['hasErrorReport'],
+        'checked_import_id': value['checkedImportId'],
+        'applied_import_id': value['appliedImportId'],
+        'expires_at': value['expiresAt'].toISOString(),
+        'size_bytes': value['sizeBytes'],
         'failure_summary': value['failureSummary'],
         'error_code': value['errorCode'],
         'error_params': value['errorParams'],
